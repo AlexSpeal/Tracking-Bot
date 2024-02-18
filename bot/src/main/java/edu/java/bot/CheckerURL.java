@@ -3,6 +3,7 @@ package edu.java.bot;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
 public class CheckerURL {
     private CheckerURL() {
     }
