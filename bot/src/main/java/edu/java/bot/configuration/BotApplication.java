@@ -1,7 +1,8 @@
-package edu.java.bot;
+package edu.java.bot.configuration;
 
-import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.controller.TelegramBot;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -9,10 +10,17 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 @EnableConfigurationProperties(ApplicationConfig.class)
 public class BotApplication {
+
+    @Autowired
+    private ApplicationConfig applicationConfig;
+
     public static void main(String[] args) {
         SpringApplication.run(BotApplication.class, args);
-        TelegramBot bot = edu.java.bot.controller.TelegramBot.builder()
-            .config(new ApplicationConfig("6278402620:AAHqZgjAbOMGFZl8tY6jW66gPoWz_Uy0Ukw")).build();
+    }
+
+    @PostConstruct
+    private void runBot() {
+        TelegramBot bot = new TelegramBot(applicationConfig.telegramToken());
         bot.run();
     }
 }
