@@ -2,8 +2,8 @@
 ![Scrapper](https://github.com/sanyarnd/java-course-2023-backend-template/actions/workflows/scrapper.yml/badge.svg)
 
 # Link Tracker
-Ссылка на бота: https://t.me/website_tracking_bot
-ФИО: Гонных Александр Андреевич
+Ссылка на бота: https://t.me/website_tracking_bot .
+ФИО: Гонных Александр Андреевич .
 
 Приложение для отслеживания обновлений контента по ссылкам.
 При появлении новых событий отправляется уведомление в Telegram.
