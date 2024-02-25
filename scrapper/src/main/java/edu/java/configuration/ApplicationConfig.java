@@ -10,14 +10,15 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
     @NotNull
+    BaseUrl baseUrl,
+    @NotNull
     @Bean
-    Scheduler scheduler,
-    @NotNull
-    String gitHubBaseUrl,
-    @NotNull
-    String stackOverFlowBaseUrl
+    Scheduler scheduler
 ) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
+    }
+
+    public record BaseUrl(@NotNull String gitHubBaseUrl, @NotNull String stackOverFlowBaseUrl) {
     }
 }
