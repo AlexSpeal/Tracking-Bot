@@ -1,4 +1,6 @@
 app:
+  bot-client:
+    base-url: https://localhost:8080
   base-url:
     git-hub-base-url: "https://api.github.com"
     stack-overflow-base-url: "https://api.stackexchange.com/2.3"

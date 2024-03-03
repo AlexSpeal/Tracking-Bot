@@ -1,6 +1,7 @@
 package edu.java.clients;
 
 import org.example.dto.request.SendUpdateRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -11,8 +12,8 @@ import reactor.core.publisher.Mono;
 public class BotClient {
     private final WebClient webClient;
 
-    public BotClient(WebClient webClient) {
-        this.webClient = webClient;
+    public BotClient(@Value("${app.bot-client.base-url}") String url) {
+        this.webClient = WebClient.builder().baseUrl(url).build();
     }
 
     public void updates(SendUpdateRequest request) {
