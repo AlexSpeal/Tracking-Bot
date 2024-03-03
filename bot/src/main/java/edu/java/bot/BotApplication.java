@@ -1,5 +1,6 @@
-package edu.java.bot.configuration;
+package edu.java.bot;
 
+import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.controller.TelegramBot;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
