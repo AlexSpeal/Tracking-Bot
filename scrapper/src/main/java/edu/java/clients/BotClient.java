@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 public class BotClient {
     private final WebClient webClient;
 
-    public BotClient(@Value("${app.bot-client.base-url}") String url) {
+    public BotClient(@Value("${bot-client.base-url-bot}") String url) {
         this.webClient = WebClient.builder().baseUrl(url).build();
     }
 

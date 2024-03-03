@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 public class ScrapperClient {
     private final WebClient webClient;
 
-    public ScrapperClient(@Value("${app.scrapper-client.base-url}") String url) {
+    public ScrapperClient(@Value("${scrapper-client.base-url}") String url) {
         this.webClient = WebClient.builder().baseUrl(url).build();
     }
 

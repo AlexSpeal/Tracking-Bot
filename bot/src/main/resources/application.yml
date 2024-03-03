@@ -1,6 +1,4 @@
 app:
-  scrapper-client:
-    base-url: https://localhost:8090
   telegram-token: 6278402620:AAHqZgjAbOMGFZl8tY6jW66gPoWz_Uy0Ukw
 
 spring:
@@ -8,7 +6,8 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
-
+scrapper-client:
+  base-url: "https://localhost:8090"
 server:
   port: 8090
 
