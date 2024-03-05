@@ -3,9 +3,7 @@ package edu.java.bot.controller;
 import com.pengrad.telegrambot.UpdatesListener;
 import edu.java.bot.CommandsHandler;
 import edu.java.bot.user.UsersBase;
-import org.springframework.stereotype.Component;
 
-@Component
 public class TelegramBot extends com.pengrad.telegrambot.TelegramBot {
     @lombok.Builder
     public TelegramBot(String token) {

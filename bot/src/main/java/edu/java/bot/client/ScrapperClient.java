@@ -3,7 +3,6 @@ package edu.java.bot.client;
 import org.example.dto.request.AddLinkRequest;
 import org.example.dto.response.LinkResponse;
 import org.example.dto.response.ListLinksResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,8 +15,8 @@ import reactor.core.publisher.Mono;
 public class ScrapperClient {
     private final WebClient webClient;
 
-    public ScrapperClient(@Value("${scrapper-client.base-url}") String url) {
-        this.webClient = WebClient.builder().baseUrl(url).build();
+    public ScrapperClient(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     public void createChat(Long chat) {

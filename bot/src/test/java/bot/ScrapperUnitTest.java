@@ -9,6 +9,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import edu.java.bot.client.ScrapperClient;
+import edu.java.bot.configuration.ScrapperClientConfiguration;
 import org.example.dto.request.AddLinkRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,7 @@ public class ScrapperUnitTest {
         wireMockServer = new WireMockServer();
         wireMockServer.start();
         configureFor("localhost", wireMockServer.port());
-        client = new ScrapperClient("http://localhost:" + wireMockServer.port());
+        client = new ScrapperClientConfiguration().getScrapperClient("http://localhost:" + wireMockServer.port());
     }
 
     @AfterEach
