@@ -45,6 +45,12 @@
         <checkstyle.version>10.12.7</checkstyle.version>
     </properties>
 
+    <modules>
+        <module>bot</module>
+        <module>scrapper</module>
+        <module>modules</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -65,6 +71,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
