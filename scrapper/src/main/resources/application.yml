@@ -8,6 +8,8 @@ app:
     interval: 10s
     force-check-delay: 10s
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   application:
     name: scrapper
 
