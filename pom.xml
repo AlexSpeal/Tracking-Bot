@@ -48,6 +48,7 @@
     <modules>
         <module>bot</module>
         <module>scrapper</module>
+        <module>modules</module>
     </modules>
 
     <dependencyManagement>
@@ -70,7 +71,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -95,6 +95,11 @@
             <artifactId>annotations</artifactId>
             <version>${jetbrains-annotations.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
         <!-- Tests -->
