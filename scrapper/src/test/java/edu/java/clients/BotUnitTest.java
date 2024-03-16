@@ -2,12 +2,10 @@ package edu.java.clients;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.configuration.BotClientConfiguration;
-import org.example.dto.request.AddLinkRequest;
 import org.example.dto.request.SendUpdateRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
