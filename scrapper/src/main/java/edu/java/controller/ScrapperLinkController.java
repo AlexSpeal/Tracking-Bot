@@ -1,6 +1,7 @@
 package edu.java.controller;
 
 import edu.java.errors.NotFoundException;
+import edu.java.servises.interfaces.LinkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import java.net.URI;
 import java.net.URISyntaxException;
+import lombok.AllArgsConstructor;
 import org.example.dto.request.AddLinkRequest;
 import org.example.dto.response.ApiErrorResponse;
 import org.example.dto.response.LinkResponse;
@@ -24,10 +26,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/links")
+@AllArgsConstructor
 public class ScrapperLinkController {
+    private final LinkService linkService;
+
     @Operation(summary = "Получить все отслеживаемые ссылки")
     @ApiResponses(value = {
         @ApiResponse(
@@ -51,12 +55,9 @@ public class ScrapperLinkController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ListLinksResponse getLinks(@RequestParam @Positive Long tgChatId)
-        throws URISyntaxException {
-        LinkResponse[] link =
-            new LinkResponse[] {new LinkResponse(tgChatId, new URI("https://github.com/AlexSpeal/zxc")),
-                new LinkResponse(tgChatId, new URI("https://github.com/AlexSpeal/qwerty"))};
-        return new ListLinksResponse(link, 2);
+    public ListLinksResponse getLinks(@RequestParam @Positive Long tgChatId) {
+        return linkService.listAll(tgChatId);
+
     }
 
     @Operation(summary = "Добавить отслеживание ссылки")
@@ -85,7 +86,8 @@ public class ScrapperLinkController {
         @RequestParam @Positive Long tgChatId,
         @RequestBody @Valid AddLinkRequest addLinkRequest
     ) throws URISyntaxException {
-        return new LinkResponse(tgChatId, new URI(addLinkRequest.link()));
+        linkService.add(tgChatId, addLinkRequest.link());
+        return new LinkResponse(tgChatId, addLinkRequest.link());
     }
 
     @Operation(summary = "Убрать отслеживание ссылки")
@@ -128,6 +130,6 @@ public class ScrapperLinkController {
         if (false) {
             throw new NotFoundException("Not Found");
         }
-        return new LinkResponse(tgChatId, new URI(addLinkRequest.link()));
+        return new LinkResponse(tgChatId, addLinkRequest.link());
     }
 }
