@@ -1,6 +1,5 @@
 package edu.java.dao.interfaces;
 
-import edu.java.dto.jdbc.ChatDto;
 import edu.java.dto.jdbc.LinkDto;
 import java.net.URI;
 import java.util.List;

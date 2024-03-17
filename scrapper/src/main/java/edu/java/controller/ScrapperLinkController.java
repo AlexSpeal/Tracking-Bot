@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import java.net.URI;
 import java.net.URISyntaxException;
 import lombok.AllArgsConstructor;
 import org.example.dto.request.AddLinkRequest;
@@ -126,10 +125,7 @@ public class ScrapperLinkController {
         @RequestBody @Valid AddLinkRequest addLinkRequest
     )
         throws NotFoundException, URISyntaxException {
-        // пока подготовил почву
-        if (false) {
-            throw new NotFoundException("Not Found");
-        }
+        linkService.remove(tgChatId, addLinkRequest.link());
         return new LinkResponse(tgChatId, addLinkRequest.link());
     }
 }

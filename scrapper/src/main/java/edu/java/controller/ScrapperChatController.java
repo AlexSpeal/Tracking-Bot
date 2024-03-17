@@ -1,7 +1,5 @@
 package edu.java.controller;
 
-import edu.java.dao.interfaces.ChatRepository;
-import edu.java.servises.interfaces.LinkService;
 import edu.java.servises.interfaces.TgChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -46,7 +44,7 @@ public class ScrapperChatController {
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String registerChat(@RequestBody @Valid @Positive Long id, String username) {
-        tgChatService.register(id,username);
+        tgChatService.register(id, username);
         return "Удачно!";
     }
 
@@ -77,6 +75,7 @@ public class ScrapperChatController {
     })
     @DeleteMapping("/{id}")
     public String deleteChat(@RequestBody @Valid @Positive Long id) {
-        return "Чат успешно удалён";
+        tgChatService.unregister(id);
+        return "Чат удалён";
     }
 }

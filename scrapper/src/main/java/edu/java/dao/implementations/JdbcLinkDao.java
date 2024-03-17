@@ -3,15 +3,14 @@ package edu.java.dao.implementations;
 import edu.java.dao.interfaces.LinkRepository;
 import edu.java.dto.jdbc.LinkDto;
 import edu.java.errors.DuplicateLinkException;
+import java.net.URI;
+import java.util.List;
 import lombok.AllArgsConstructor;
-
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import java.net.URI;
-import java.util.List;
 
 @Repository
 @AllArgsConstructor
@@ -24,7 +23,7 @@ public class JdbcLinkDao implements LinkRepository {
     public void add(LinkDto link) {
         try {
             jdbcTemplate.update("INSERT INTO link(url,updated_at,last_update) VALUES (?,?,?)",
-                link.getUrl().toString(), link.getUpdatedAt(),link.getLastUpdate()
+                link.getUrl().toString(), link.getUpdatedAt(), link.getLastUpdate()
             );
         } catch (DataAccessException exception) {
             throw new DuplicateLinkException("Введена существующая ссылка!");

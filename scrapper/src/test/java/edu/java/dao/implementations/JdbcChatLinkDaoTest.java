@@ -82,11 +82,11 @@ public class JdbcChatLinkDaoTest extends IntegrationTest {
         jdbcLinkDao.add(linkDto);
         jdbcChatDao.add(chatDto);
         jdbcLinkDao.add(linkDto2);
-        jdbcChatLinkDao.add(new ChatLinkDto(chatDto.getChat_id(), jdbcLinkDao.findAll().getFirst().getLinkId()));
-        jdbcChatLinkDao.add(new ChatLinkDto(chatDto.getChat_id(), jdbcLinkDao.findAll().getLast().getLinkId()));
+        jdbcChatLinkDao.add(new ChatLinkDto(chatDto.getChatId(), jdbcLinkDao.findAll().getFirst().getLinkId()));
+        jdbcChatLinkDao.add(new ChatLinkDto(chatDto.getChatId(), jdbcLinkDao.findAll().getLast().getLinkId()));
         List<ChatLinkDto> chatLinkDtoList =
-            List.of(new ChatLinkDto(chatDto.getChat_id(), jdbcLinkDao.findAll().getFirst()
-                .getLinkId()), new ChatLinkDto(chatDto.getChat_id(), jdbcLinkDao.findAll().getLast()
+            List.of(new ChatLinkDto(chatDto.getChatId(), jdbcLinkDao.findAll().getFirst()
+                .getLinkId()), new ChatLinkDto(chatDto.getChatId(), jdbcLinkDao.findAll().getLast()
                 .getLinkId()));
         assertThat(jdbcChatLinkDao.findAll()).isEqualTo(chatLinkDtoList);
     }

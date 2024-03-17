@@ -1,10 +1,9 @@
 package edu.java.dto.jdbc;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +13,7 @@ public class LinkDto {
     private OffsetDateTime updatedAt;
     private OffsetDateTime lastUpdate;
 
-    public LinkDto(URI url, OffsetDateTime updatedAt,OffsetDateTime lastUpdate) {
+    public LinkDto(URI url, OffsetDateTime updatedAt, OffsetDateTime lastUpdate) {
         this.url = url;
         this.updatedAt = updatedAt;
         this.lastUpdate = lastUpdate;
