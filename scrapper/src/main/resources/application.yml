@@ -1,5 +1,5 @@
 app:
-  base-url-bot: "https://localhost:8080"
+  base-url-bot: "http://localhost:8090"
   base-url:
     git-hub-base-url: "https://api.github.com"
     stack-overflow-base-url: "https://api.stackexchange.com/2.3"

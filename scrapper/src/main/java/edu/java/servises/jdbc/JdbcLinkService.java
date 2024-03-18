@@ -42,8 +42,13 @@ public class JdbcLinkService implements LinkService {
         jdbcChatLinkDao.remove(chatLinkDto);
         List<ChatLinkDto> linkDtos = jdbcChatLinkDao.getAllTgChatsByLinkId(linkDtoList.getFirst().getLinkId());
         if (linkDtos.isEmpty()) {
-            jdbcLinkDao.remove(linkDtos.getFirst().getLinkId());
+            jdbcLinkDao.remove(linkDtoList.getFirst().getLinkId());
         }
+    }
+
+    @Override
+    public List<Long> getLinkedChadId(long linkId) {
+        return jdbcChatLinkDao.getAllTgChatsByLinkId(linkId).stream().map(ChatLinkDto::getLinkId).toList();
     }
 
     @Override

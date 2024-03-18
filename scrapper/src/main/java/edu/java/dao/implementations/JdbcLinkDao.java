@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @AllArgsConstructor
+@SuppressWarnings("MagicNumber")
 public class JdbcLinkDao implements LinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -54,18 +55,19 @@ public class JdbcLinkDao implements LinkRepository {
 
     @Override
     public void updateUpdateTime(long linkId, OffsetDateTime time) {
-        jdbcTemplate.update("UPDATE link SET update_at=? WHERE link_id=?", time, linkId);
+        jdbcTemplate.update("UPDATE link SET updated_at=? WHERE link_id=?", time, linkId);
     }
 
     @Override
     public void updateCheckTime(long linkId, OffsetDateTime time) {
-        jdbcTemplate.update("UPDATE link SET check_at=? WHERE link_id=?", time, linkId);
+        jdbcTemplate.update("UPDATE link SET last_update=? WHERE link_id=?", time, linkId);
     }
+
 
     @Override
     public List<LinkDto> findOldLinksToCheck(OffsetDateTime time) {
         return jdbcTemplate.query(
-            "SELECT * FROM link WHERE  check_at<?",
+            "SELECT * FROM link WHERE  last_update < ?",
             new BeanPropertyRowMapper<>(LinkDto.class),
             time
         );

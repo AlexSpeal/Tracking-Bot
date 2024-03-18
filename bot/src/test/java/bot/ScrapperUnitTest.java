@@ -14,6 +14,8 @@ import org.example.dto.request.AddLinkRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class ScrapperUnitTest {
     private WireMockServer wireMockServer;
@@ -33,8 +35,8 @@ public class ScrapperUnitTest {
     }
 
     @Test
-    public void createLink() {
-        var request = new AddLinkRequest("https://api.github.com");
+    public void createLink() throws URISyntaxException {
+        var request = new AddLinkRequest( new URI("https://api.github.com"));
         var response = """
             {
               "id": 1,
@@ -55,8 +57,8 @@ public class ScrapperUnitTest {
     }
 
     @Test
-    public void deleteLink() {
-        var request = new AddLinkRequest("https://api.github.com");
+    public void deleteLink() throws URISyntaxException {
+        var request = new AddLinkRequest(new URI("https://api.github.com"));
         var response = """
             {
               "id": 1,
