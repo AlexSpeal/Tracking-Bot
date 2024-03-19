@@ -1,5 +1,5 @@
 app:
-  base-url-bot: "https://localhost:8080"
+  base-url-bot: "http://localhost:8090"
   base-url:
     git-hub-base-url: "https://api.github.com"
     stack-overflow-base-url: "https://api.stackexchange.com/2.3"
@@ -7,11 +7,18 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
+
+
 spring:
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  liquibase:
+    enabled: false
   application:
     name: scrapper
+  datasource:
+    driver_class_name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
 
 
 

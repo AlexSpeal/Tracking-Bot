@@ -1,5 +1,5 @@
 app:
-  base-url-scrapper: "https://localhost:8090"
+  base-url-scrapper: "http://localhost:8080"
   telegram-token: 6278402620:AAHqZgjAbOMGFZl8tY6jW66gPoWz_Uy0Ukw
 
 spring:
