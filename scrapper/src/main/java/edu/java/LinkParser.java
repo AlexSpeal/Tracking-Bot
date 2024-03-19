@@ -9,8 +9,8 @@ public class LinkParser {
 
     }
 
-    private static final String REGEX_OWNER = "^https://github\\.com\\/([a-zA-Z0-9-]+)\\/[a-zA-Z0-9-]+\\/$";
-    private static final String REGEX_REPO = "^https://github\\.com\\/[a-zA-Z0-9-]+\\/([a-zA-Z0-9-]+)\\/$";
+    private static final String REGEX_OWNER = "https://github\\.com\\/([a-zA-Z0-9-_]+)\\/[a-zA-Z0-9-_]+\\/?";
+    private static final String REGEX_REPO = "https://github\\.com\\/[a-zA-Z0-9-_]+\\/([a-zA-Z0-9-_]+)\\/?";
     private static final String REGEX_QUESTION_ID = "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)";
 
     public static String getGitHubOwner(URI url) {
