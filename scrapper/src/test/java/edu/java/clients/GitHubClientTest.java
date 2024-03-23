@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.ScrapperApplication;
-import edu.java.dto.Repository;
+import edu.java.dto.jdbc.github.Github;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -21,8 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
 @WireMockTest
 class GitHubClientTest {
-    static final String BODY_REQUEST = "{\"name\": \"vkusnoe_brevno\"}";
+    static final String BODY_REQUEST = "{\"name\": \"vkusnoe_brevno\",\"pushed_at\": \"123\"}";
+    static final String BODY_REQUEST2 = "[{\"name\": \"main\",\"commit\": {\"sha\": \"qwerty\"}}\n]";
+    static final String BODY_REQUEST3 = "[{\"number\": 1,\"title\": \"zxc\",\"created_at\": \"2024-03-23T20:13:54Z\"}]";
     static final String URL = "/repos/AlexBebrovich/Plotina";
+    static final String URL2 = "/repos/AlexBebrovich/Plotina/branches";
+    static final String URL3 = "/repos/AlexBebrovich/Plotina/pulls";
     static final String ERROR_404 = "404 NOT_FOUND \"Link is not valid\"";
     static final String ERROR_500 = "500 INTERNAL_SERVER_ERROR \"Internal Server Error\"";
 
@@ -46,8 +50,23 @@ class GitHubClientTest {
             .withBody(BODY_REQUEST)
             .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
         ));
-        Repository rep = gitHubClient.getRep("AlexBebrovich", "Plotina");
-        assertEquals("vkusnoe_brevno", rep.name());
+
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlEqualTo(
+            URL2)
+        ).willReturn(aResponse()
+            .withBody(BODY_REQUEST2)
+            .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+        ));
+
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlEqualTo(
+            URL3)
+        ).willReturn(aResponse()
+            .withBody(BODY_REQUEST3)
+            .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+        ));
+
+        Github rep = gitHubClient.getRep("AlexBebrovich", "Plotina");
+        assertEquals("vkusnoe_brevno", rep.repository().name());
     }
 
     @Test

@@ -38,12 +38,12 @@ public class JdbcChatLinkDaoTest extends IntegrationTest {
     private static final LinkDto linkDto =
         new LinkDto(
             URI.create("https://github.com/onevoker/LinkTrackerBot"),data1,data1
-
+,"github","{бурури,парирам}"
             );
     private static final LinkDto linkDto2 =
         new LinkDto(
             URI.create("https://github.com/onevoker/LinkTracker"),
-            data2,data2
+            data2,data2,"github","{мими,мамому}"
         );
 
     @Test
