@@ -4,7 +4,11 @@ import edu.java.dao.implementations.JdbcChatLinkDao;
 import edu.java.dao.implementations.JdbcLinkDao;
 import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
+import edu.java.dto.jdbc.github.Github;
+import edu.java.dto.jdbc.stackOverflow.Question;
 import edu.java.errors.LinkWasNotTrackedException;
+import edu.java.servises.handlers.GithubHandler;
+import edu.java.servises.handlers.StackOverflowHandler;
 import edu.java.servises.interfaces.LinkService;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -20,6 +24,10 @@ import org.springframework.stereotype.Service;
 public class JdbcLinkService implements LinkService {
     private final JdbcLinkDao jdbcLinkDao;
     private final JdbcChatLinkDao jdbcChatLinkDao;
+    private final GithubHandler githubHandler;
+    private final StackOverflowHandler stackOverflowHandler;
+    private final static String GITHUB = "github";
+    private final static String STACKOVERFLOW = "stackoverflow";
 
     @Override
     public void add(long tgChatId, URI url) {
@@ -63,10 +71,36 @@ public class JdbcLinkService implements LinkService {
 
     void addLinkIfNotExist(long tgChatId, URI url) {
         OffsetDateTime data = OffsetDateTime.now();
-        LinkDto linkDto = new LinkDto(url, data, data);
+        String type = getType(url);
+        String dataRep = getDate(type, url);
+        LinkDto linkDto = new LinkDto(url, data, data, type, dataRep);
         jdbcLinkDao.add(linkDto);
 
         ChatLinkDto chatLinkDto = new ChatLinkDto(tgChatId, jdbcLinkDao.getByUri(url).getFirst().getLinkId());
         jdbcChatLinkDao.add(chatLinkDto);
+    }
+
+    String getType(URI uri) {
+        if (uri.getHost().contains("github.com")) {
+            return GITHUB;
+        } else if (uri.getHost().contains("stackoverflow.com")) {
+            return STACKOVERFLOW;
+        } else {
+            return "";
+        }
+
+    }
+
+    String getDate(String type, URI url) {
+        switch (type) {
+            case GITHUB:
+                Github github = githubHandler.getInfoByUrl(url);
+                return githubHandler.getData(github);
+            case STACKOVERFLOW:
+                Question sof = stackOverflowHandler.getInfoByUrl(url);
+                return stackOverflowHandler.getData(sof);
+            default:
+                return "";
+        }
     }
 }

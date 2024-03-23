@@ -1,6 +1,6 @@
 package edu.java.clients;
 
-import edu.java.dto.Question;
+import edu.java.dto.jdbc.stackOverflow.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.WebClient;

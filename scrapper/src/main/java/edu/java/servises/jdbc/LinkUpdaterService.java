@@ -1,6 +1,5 @@
 package edu.java.servises.jdbc;
 
-import edu.java.dao.implementations.JdbcChatLinkDao;
 import edu.java.dao.implementations.JdbcLinkDao;
 import edu.java.dto.jdbc.LinkDto;
 import edu.java.servises.interfaces.LinkUpdater;
@@ -15,12 +14,10 @@ import org.springframework.stereotype.Service;
 public class LinkUpdaterService implements LinkUpdater {
     @Autowired
     private JdbcLinkDao jdbcLinkDao;
-    @Autowired
-    private JdbcChatLinkDao jdbcChatLinkDao;
 
     @Override
-    public void update(long linkId, OffsetDateTime time) {
-        jdbcLinkDao.updateUpdateTime(linkId, time);
+    public void update(long linkId, OffsetDateTime time, String data) {
+        jdbcLinkDao.updateData(linkId, time, data);
     }
 
     @Override
