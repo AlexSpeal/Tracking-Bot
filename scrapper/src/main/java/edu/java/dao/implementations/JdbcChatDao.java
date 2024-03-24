@@ -2,6 +2,7 @@ package edu.java.dao.implementations;
 
 import edu.java.dao.interfaces.ChatRepository;
 import edu.java.dto.jdbc.ChatDto;
+import edu.java.dto.jdbc.StateDto;
 import edu.java.errors.ChatAlreadyExistsException;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -21,8 +22,8 @@ public class JdbcChatDao implements ChatRepository {
     @Override
     public void add(ChatDto chat) {
         try {
-            jdbcTemplate.update("INSERT INTO chat(chat_id,created_at,created_by) VALUES (?,?,?)",
-                chat.getChatId(), chat.getCreatedAt(), chat.getCreatedBy()
+            jdbcTemplate.update("INSERT INTO chat(chat_id,created_at,created_by,state) VALUES (?,?,?,?)",
+                chat.getChatId(), chat.getCreatedAt(), chat.getCreatedBy(), chat.getState()
             );
         } catch (DataAccessException exception) {
             throw new ChatAlreadyExistsException("Чат уже зарегестрирован!");
@@ -33,6 +34,25 @@ public class JdbcChatDao implements ChatRepository {
     @Override
     public void remove(Long id) {
         jdbcTemplate.update("DELETE FROM chat WHERE chat_id=?", id);
+    }
+
+    @Transactional
+    @Override
+    public void setState(Long id, String state) {
+        jdbcTemplate.update("UPDATE chat SET state=? WHERE chat_id=?",
+            state, id
+        );
+    }
+
+    @Transactional
+    @Override
+    public String getState(Long id) {
+        return jdbcTemplate.query(
+                "SELECT state FROM chat WHERE chat_id=?",
+                new BeanPropertyRowMapper<>(StateDto.class),
+                id
+            )
+            .getLast().getState();
     }
 
     @Transactional

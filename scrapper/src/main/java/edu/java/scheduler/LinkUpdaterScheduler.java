@@ -1,7 +1,7 @@
 package edu.java.scheduler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.java.LinkParser;
+import org.example.dto.LinkParser;
 import edu.java.clients.BotClient;
 import edu.java.clients.GitHubClient;
 import edu.java.clients.StackOverflowClient;

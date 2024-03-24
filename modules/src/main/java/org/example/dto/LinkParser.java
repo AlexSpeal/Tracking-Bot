@@ -1,6 +1,7 @@
-package edu.java;
+package org.example.dto;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +25,16 @@ public class LinkParser {
 
     public static String getGitHubRepo(URI url) {
         return urlMatcher(url, REGEX_REPO);
+    }
+
+    public static boolean check(String url) {
+        URI link;
+        try {
+            link = new URI(url);
+        } catch (URISyntaxException e) {
+            return false;
+        }
+        return !urlMatcher(link, REGEX_OWNER).isEmpty() || !urlMatcher(link, REGEX_QUESTION_ID).isEmpty();
     }
 
     private static String urlMatcher(URI url, String regex) {

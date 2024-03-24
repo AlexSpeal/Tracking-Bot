@@ -12,6 +12,7 @@ import edu.java.servises.interfaces.TgChatService;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.example.dto.response.StateResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,7 +27,7 @@ public class JdbcTgChatService implements TgChatService {
         if (jdbcChatDao.findAll().stream().anyMatch(c -> c.getChatId() == tgChatId)) {
             throw new ChatAlreadyExistsException("Чат уже создан!");
         }
-        ChatDto chatDto = new ChatDto(tgChatId, OffsetDateTime.now(), username);
+        ChatDto chatDto = new ChatDto(tgChatId, OffsetDateTime.now(), username, "NONE");
         jdbcChatDao.add(chatDto);
     }
 
@@ -44,5 +45,15 @@ public class JdbcTgChatService implements TgChatService {
             }
         }
         jdbcChatDao.remove(tgChatId);
+    }
+
+    @Override
+    public void setState(long tgChatId, String state) {
+        jdbcChatDao.setState(tgChatId, state);
+    }
+
+    @Override
+    public StateResponse getState(long tgChatId) {
+        return new StateResponse(jdbcChatDao.getState(tgChatId));
     }
 }

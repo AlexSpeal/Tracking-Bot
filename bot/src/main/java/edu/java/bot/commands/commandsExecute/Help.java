@@ -7,7 +7,7 @@ import edu.java.bot.user.UsersBase;
 
 public class Help implements Command {
     @Override
-    public SendMessage apply(Update update, UsersBase usersBase) {
+    public SendMessage apply(Update update) {
         return new SendMessage(
             update.message().chat().id(),
             "/Start -- зарегистрировать пользователя\n"

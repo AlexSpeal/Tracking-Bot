@@ -33,7 +33,7 @@ public class JdbcChatLinkDaoTest extends IntegrationTest {
     public static final ChatDto chatDto = new ChatDto(
         CHAT_ID,
         OffsetDateTime.of(2024, 3, 13, 1, 42, 0, 0, ZoneOffset.UTC),
-        "Alex"
+        "Alex","NONE"
     );
     private static final LinkDto linkDto =
         new LinkDto(
