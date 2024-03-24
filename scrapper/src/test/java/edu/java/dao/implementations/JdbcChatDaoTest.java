@@ -21,7 +21,7 @@ class JdbcChatDaoTest extends IntegrationTest {
     @Rollback
     void add() {
         OffsetDateTime data = OffsetDateTime.parse("2022-01-01T10:30:00+00:00");
-        ChatDto chatDto = new ChatDto(12L, data, "Alex");
+        ChatDto chatDto = new ChatDto(12L, data, "Alex","NONE");
         jdbcChatDao.add(chatDto);
         assertThat(jdbcChatDao.findAll().size()).isEqualTo(1);
         var exception = assertThrows(ChatAlreadyExistsException.class, () -> jdbcChatDao.add(chatDto));
@@ -32,7 +32,7 @@ class JdbcChatDaoTest extends IntegrationTest {
     @Rollback
     void remove() {
         OffsetDateTime data = OffsetDateTime.parse("2022-01-01T10:30:00+00:00");
-        ChatDto chatDto = new ChatDto(12L, data, "Alex");
+        ChatDto chatDto = new ChatDto(12L, data, "Alex","NONE");
         jdbcChatDao.add(chatDto);
         jdbcChatDao.remove(12L);
         assertThat(jdbcChatDao.findAll().size()).isEqualTo(0);
@@ -43,9 +43,9 @@ class JdbcChatDaoTest extends IntegrationTest {
     @Rollback
     void findAll() {
         OffsetDateTime data = OffsetDateTime.parse("2022-01-01T10:30:00+00:00");
-        ChatDto chatDto1 = new ChatDto(12L, data, "Alex");
+        ChatDto chatDto1 = new ChatDto(12L, data, "Alex","NONE");
         data = OffsetDateTime.parse("2021-01-01T10:30:00+00:00");
-        ChatDto chatDto2 = new ChatDto(13L, data, "Alexey");
+        ChatDto chatDto2 = new ChatDto(13L, data, "Alexey","NONE");
         jdbcChatDao.add(chatDto1);
         jdbcChatDao.add(chatDto2);
         List<ChatDto> chatDtoList=List.of(chatDto1,chatDto2);

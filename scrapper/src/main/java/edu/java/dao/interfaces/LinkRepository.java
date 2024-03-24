@@ -14,7 +14,7 @@ public interface LinkRepository {
 
     List<LinkDto> getByUri(URI uri);
 
-    void updateUpdateTime(long linkId, OffsetDateTime time);
+    void updateData(long linkId, OffsetDateTime time, String data);
 
     void updateCheckTime(long linkId, OffsetDateTime time);
 

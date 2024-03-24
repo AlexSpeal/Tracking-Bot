@@ -33,17 +33,17 @@ public class JdbcChatLinkDaoTest extends IntegrationTest {
     public static final ChatDto chatDto = new ChatDto(
         CHAT_ID,
         OffsetDateTime.of(2024, 3, 13, 1, 42, 0, 0, ZoneOffset.UTC),
-        "Alex"
+        "Alex","NONE"
     );
     private static final LinkDto linkDto =
         new LinkDto(
             URI.create("https://github.com/onevoker/LinkTrackerBot"),data1,data1
-
+,"github","{бурури,парирам}"
             );
     private static final LinkDto linkDto2 =
         new LinkDto(
             URI.create("https://github.com/onevoker/LinkTracker"),
-            data2,data2
+            data2,data2,"github","{мими,мамому}"
         );
 
     @Test
