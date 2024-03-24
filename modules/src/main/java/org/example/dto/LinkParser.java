@@ -1,7 +1,8 @@
 package org.example.dto;
 
+import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,9 +11,9 @@ public class LinkParser {
 
     }
 
-    private static final String REGEX_OWNER = "https://github\\.com\\/([a-zA-Z0-9-_]+)\\/[a-zA-Z0-9-_]+\\/?";
-    private static final String REGEX_REPO = "https://github\\.com\\/[a-zA-Z0-9-_]+\\/([a-zA-Z0-9-_]+)\\/?";
-    private static final String REGEX_QUESTION_ID = "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)";
+    private static final String REGEX_OWNER = "^https://github\\.com\\/([a-zA-Z0-9-_]+)\\/[a-zA-Z0-9-_]+\\/?$";
+    private static final String REGEX_REPO = "^https://github\\.com\\/[a-zA-Z0-9-_]+\\/([a-zA-Z0-9-_]+)\\/?$";
+    private static final String REGEX_QUESTION_ID = "^https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)$";
 
     public static String getGitHubOwner(URI url) {
         return urlMatcher(url, REGEX_OWNER);
@@ -27,14 +28,24 @@ public class LinkParser {
         return urlMatcher(url, REGEX_REPO);
     }
 
-    public static boolean check(String url) {
-        URI link;
+    public static boolean check(String uri) {
+        URL link;
+        boolean result = false;
         try {
-            link = new URI(url);
-        } catch (URISyntaxException e) {
-            return false;
+            link = new URL(uri);
+            HttpURLConnection urlConnection = (HttpURLConnection) link.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+            int responsecode = urlConnection.getResponseCode();
+            if (responsecode == 200) {
+                return !urlMatcher(link.toURI(), REGEX_OWNER).isEmpty() ||
+                    !urlMatcher(link.toURI(), REGEX_QUESTION_ID).isEmpty();
+            }
+        } catch (Exception ignored) {
+
         }
-        return !urlMatcher(link, REGEX_OWNER).isEmpty() || !urlMatcher(link, REGEX_QUESTION_ID).isEmpty();
+        return result;
+
     }
 
     private static String urlMatcher(URI url, String regex) {

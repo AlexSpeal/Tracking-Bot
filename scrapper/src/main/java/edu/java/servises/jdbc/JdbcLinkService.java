@@ -56,7 +56,7 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public List<Long> getLinkedChadId(long linkId) {
-        return jdbcChatLinkDao.getAllTgChatsByLinkId(linkId).stream().map(ChatLinkDto::getLinkId).toList();
+        return jdbcChatLinkDao.getAllTgChatsByLinkId(linkId).stream().map(ChatLinkDto::getChatId).toList();
     }
 
     @Override

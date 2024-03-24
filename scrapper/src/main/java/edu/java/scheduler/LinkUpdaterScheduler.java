@@ -55,7 +55,7 @@ public class LinkUpdaterScheduler {
                 botClient.updates(new SendUpdateRequest(
                     links.getLinkId(),
                     links.getUrl().toString(),
-                        description,
+                    description,
                     jdbcLinkService.getLinkedChadId(links.getLinkId())
                 ));
             }
@@ -63,7 +63,8 @@ public class LinkUpdaterScheduler {
     }
 
     public String gitHubUpdate(LinkDto link) {
-        String startDescription = "Обновление по вашей ссылке. Пояснение: ";
+        StringBuilder startDescription = new StringBuilder();
+        startDescription.append("Обновление по ссылке ").append(link.getUrl()).append(" Пояснение:");
         StringBuilder description = new StringBuilder();
         String owner = LinkParser.getGitHubOwner(link.getUrl());
         String repo = LinkParser.getGitHubRepo(link.getUrl());
@@ -75,26 +76,25 @@ public class LinkUpdaterScheduler {
             try {
                 GitHubData gitHubData = Json.mapper().readValue(link.getData(), GitHubData.class);
                 if (repository.branches().length > gitHubData.numberBranches()) {
-                    description.append("В репозитории ").append(repository.repository().name())
-                        .append(" Появилась новая ветка ")
-                        .append(repository.branches()[0].name()).append("\n");
+                    description.append(" В репозитории ").append(repository.repository().name())
+                        .append(" появилась новая ветка.").append("\n");
                 } else if (repository.branches().length < gitHubData.numberBranches()) {
-                    description.append("В репозитории ").append(repository.repository().name())
-                        .append(" Исчезла ветка ").append("\n");
+                    description.append(" В репозитории ").append(repository.repository().name())
+                        .append(" исчезла ветка.").append("\n");
                 }
                 if (repository.pullRequests().length > gitHubData.numberPullRequests()) {
-                    description.append("В репозитории ").append(repository.repository().name())
-                        .append(" Появилась новый pull request ")
-                        .append(repository.pullRequests()[0].title()).append("\n");
+                    description.append(" В репозитории ").append(repository.repository().name())
+                        .append(" появился новый pull request ")
+                        .append(repository.pullRequests()[0].title()).append(".\n");
                 } else if (repository.pullRequests().length < gitHubData.numberPullRequests()) {
-                    description.append("В репозитории ").append(repository.repository().name())
-                        .append(" Удалили pull request ").append("\n");
+                    description.append(" В репозитории ").append(repository.repository().name())
+                        .append(" удалили pull request.").append("\n");
                 } else if (Arrays.hashCode(repository.pullRequests()) != gitHubData.pullRequestsHash()) {
-                    description.append("В репозитории ").append(repository.repository().name())
-                        .append(" добавлен новый коммит ").append("\n");
+                    description.append(" В репозитории ").append(repository.repository().name())
+                        .append(" добавлен новый коммит.").append("\n");
                 }
-                if (description.toString().equals(startDescription)) {
-                    description.append("Произошло какое-то обновление");
+                if (description.compareTo(startDescription) == 0) {
+                    description.append(" Произошло какое-то обновление");
                 }
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
@@ -104,7 +104,8 @@ public class LinkUpdaterScheduler {
     }
 
     public String stackOverflowUpdate(LinkDto link) {
-        String startDescription = "Обновление по вашей ссылке. Пояснение: ";
+        StringBuilder startDescription = new StringBuilder();
+        startDescription.append("Обновление по ссылке ").append(link.getUrl()).append(" Пояснение:");
         StringBuilder description = new StringBuilder();
         long questions = LinkParser.getQuestionId(link.getUrl());
         Question question = stackOverflowClient.getQuestion(questions);
@@ -115,15 +116,15 @@ public class LinkUpdaterScheduler {
             try {
                 StackOverflowData stackOverflowData = Json.mapper().readValue(link.getData(), StackOverflowData.class);
                 if (question.items().getFirst().answerCount() > stackOverflowData.answerCount()) {
-                    description.append(" В вопросе ").append(questions).append(" Появился новый ответ").append("\n");
+                    description.append(" В вопросе ").append(questions).append(" появился новый ответ.").append("\n");
                 }
                 if (question.items().getFirst().isAnswered() && !stackOverflowData.isAnswered()) {
-                    description.append(" По вопросу ").append(questions).append(" нашлось решение").append("\n");
+                    description.append(" По вопросу ").append(questions).append(" нашлось решение.").append("\n");
                 } else if (!question.items().getFirst().isAnswered() && stackOverflowData.isAnswered()) {
-                    description.append(" По вопросу ").append(questions).append(" отсутствует решение").append("\n");
+                    description.append(" По вопросу ").append(questions).append(" отсутствует решение.").append("\n");
                 }
-                if (description.toString().equals(startDescription)) {
-                    description.append("Произошло какое-то обновление");
+                if (description.compareTo(startDescription) == 0) {
+                    description.append(" Произошло какое-то обновление");
                 }
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);

@@ -48,25 +48,6 @@ public class CommandsHandler {
     }
 
     public SendMessage commandsHandle(Update update) {
-        /*User user = new User(update.message().chat().username(), update.message().chat().id(), new ArrayList<>());
-        User userInBase = usersBase.getUser(user.getId());
-        String text = update.message().text();
-        String answer = "Неизвестная команда";
-        if (userInBase != null) {
-            if (text.equals("/cancel")) {
-                answer = "Вы вышли в меню!";
-                userInBase.getState().setNowState(NONE);
-            } else if (!userInBase.getState().getNowState().equals(NONE)) {
-                Command command = commandsAccess.get(userInBase.getState().getNowState());
-                return command.apply(update, usersBase);
-            }
-        }
-
-        Command command = commandsExecute.get(text);
-        if (command != null) {
-            return command.apply(update, usersBase);
-        }
-        return new SendMessage(update.message().chat().id(), answer);*/
         long idChat = update.message().chat().id();
         String username = update.message().chat().username();
         String text = update.message().text();

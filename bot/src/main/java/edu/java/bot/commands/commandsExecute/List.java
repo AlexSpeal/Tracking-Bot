@@ -34,9 +34,12 @@ public class List implements Command {
             if (links.size().equals(0)) {
                 resultLinks.append("Отслеживаемых ссылок нет!");
             } else {
-                resultLinks.append("Отслеживаемые ссылки:").append(System.lineSeparator());
+                /*resultLinks.append("Отслеживаемые ссылки:").append(System.lineSeparator());
                 links.links()
-                    .forEach(linkResponse -> resultLinks.append(linkResponse.url()).append(System.lineSeparator()));
+                    .forEach(linkResponse -> resultLinks.append(linkResponse.url()).append(System.lineSeparator()));*/
+                for (int i = 0; i < links.size(); ++i) {
+                    resultLinks.append((i + 1)).append(". ").append(links.links().get(i).url()).append("\n\n");
+                }
             }
             return new SendMessage(idChat, resultLinks.toString());
         }
