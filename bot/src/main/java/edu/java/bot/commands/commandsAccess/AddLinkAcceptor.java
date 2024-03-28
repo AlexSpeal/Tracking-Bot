@@ -4,12 +4,12 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.commands.Command;
+import java.net.URI;
+import java.net.URISyntaxException;
 import org.example.dto.LinkParser;
 import org.example.dto.request.AddLinkRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 @Component
 public class AddLinkAcceptor implements Command {

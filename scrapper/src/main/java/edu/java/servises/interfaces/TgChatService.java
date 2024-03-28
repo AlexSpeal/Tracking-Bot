@@ -8,5 +8,6 @@ public interface TgChatService {
     void unregister(long tgChatId);
 
     void setState(long tgChatId, String state);
+
     StateResponse getState(long tgChatId);
 }

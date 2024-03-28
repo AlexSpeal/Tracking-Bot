@@ -1,7 +1,6 @@
 package edu.java.bot.controller;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.CommandsHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,7 +44,7 @@ public class BotController {
     @ResponseStatus(HttpStatus.OK)
     public String sendUpdate(@RequestBody @Valid SendUpdateRequest sendUpdateRequest) {
         for (long id : sendUpdateRequest.tgChatIds()) {
-            telegramBot.SendUpdate(new SendMessage(id, sendUpdateRequest.description()));
+            telegramBot.sendUpdate(new SendMessage(id, sendUpdateRequest.description()));
         }
         return "Обновление отправлено!";
     }

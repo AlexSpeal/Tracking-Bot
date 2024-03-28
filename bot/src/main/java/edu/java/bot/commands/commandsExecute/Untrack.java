@@ -4,10 +4,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.commands.Command;
-import edu.java.bot.user.State;
-import edu.java.bot.user.User;
-import edu.java.bot.user.UsersBase;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

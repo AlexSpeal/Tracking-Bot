@@ -51,7 +51,7 @@ public class ScrapperClient {
     }
 
     public ListLinksResponse getLinks(Long chat) {
-        return webClient.get().uri("/links", chat).accept(MediaType.APPLICATION_JSON)
+        return webClient.get().uri("/links").accept(MediaType.APPLICATION_JSON)
             .header("Tg-Chat-Id", chat.toString()).retrieve().onStatus(
                 HttpStatusCode::is4xxClientError,
                 error -> Mono.error(new ResponseStatusException(
@@ -98,7 +98,8 @@ public class ScrapperClient {
     }
 
     public void setState(Long chat, String state) {
-        webClient.post().uri("/tg-chat/state/{id}/{state}", chat, state).accept(MediaType.APPLICATION_JSON)
+        webClient.post().uri("/tg-chat/state/{id}", chat, state).accept(MediaType.APPLICATION_JSON)
+            .body(Mono.just(state), String.class)
             .retrieve().onStatus(
                 HttpStatusCode::is4xxClientError,
                 error -> Mono.error(new ResponseStatusException(

@@ -4,9 +4,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.commands.Command;
-import edu.java.bot.user.User;
-import edu.java.bot.user.UsersBase;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,12 +22,9 @@ public class Start implements Command {
         String username = update.message().chat().username();
         try {
             scrapperClient.createChat(idChat, username);
-            scrapperClient.deleteChat(idChat);
-
         } catch (Exception e) {
             return new SendMessage(idChat, "Вы уже зарегистрированы!");
         }
-        scrapperClient.createChat(idChat, username);
-        return new SendMessage(idChat, "Добро пожаловать!");
+        return new SendMessage(idChat, "Добро пожаловать, " + username);
     }
 }

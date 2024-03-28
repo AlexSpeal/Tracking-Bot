@@ -5,7 +5,6 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.CommandsHandler;
 import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.configuration.ApplicationConfig;
-import edu.java.bot.user.UsersBase;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TelegramBot extends com.pengrad.telegrambot.TelegramBot {
@@ -25,7 +24,7 @@ public class TelegramBot extends com.pengrad.telegrambot.TelegramBot {
         });
     }
 
-    public void SendUpdate(SendMessage sendMessage) {
+    public void sendUpdate(SendMessage sendMessage) {
         execute(sendMessage);
     }
 }

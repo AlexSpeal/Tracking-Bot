@@ -11,22 +11,18 @@ import edu.java.bot.commands.commandsExecute.List;
 import edu.java.bot.commands.commandsExecute.Start;
 import edu.java.bot.commands.commandsExecute.Track;
 import edu.java.bot.commands.commandsExecute.Untrack;
-import edu.java.bot.user.State;
-import edu.java.bot.user.User;
-import edu.java.bot.user.UsersBase;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.ArrayList;
-import java.util.Map;
-import static edu.java.bot.user.State.EnumState.FILE_ADD;
-import static edu.java.bot.user.State.EnumState.FILE_DEL;
-import static edu.java.bot.user.State.EnumState.NONE;
 
 @Component
 public class CommandsHandler {
     private ScrapperClient scrapperClient;
     private final Map<String, Command> commandsExecute;
     private final Map<String, Command> commandsAccess;
+    public static final String NONE = "NONE";
+    public static final String ADD = "ADD";
+    public static final String DEL = "DEL";
 
     @Autowired
     public CommandsHandler(ScrapperClient scrapperClient) {
@@ -44,7 +40,7 @@ public class CommandsHandler {
             new Untrack(scrapperClient)
         );
         this.commandsAccess =
-            Map.of("ADD", new AddLinkAcceptor(scrapperClient), "DEL", new RemoveLinkAcceptor(scrapperClient));
+            Map.of(ADD, new AddLinkAcceptor(scrapperClient), DEL, new RemoveLinkAcceptor(scrapperClient));
     }
 
     public SendMessage commandsHandle(Update update) {
@@ -59,8 +55,8 @@ public class CommandsHandler {
             } catch (Exception e) {
                 if (text.equals("/cancel")) {
                     answer = "Вы вышли в меню!";
-                    scrapperClient.setState(idChat, "NONE");
-                } else if (!scrapperClient.getState(idChat).state().equals("NONE")) {
+                    scrapperClient.setState(idChat, NONE);
+                } else if (!scrapperClient.getState(idChat).state().equals(NONE)) {
                     Command command = commandsAccess.get(scrapperClient.getState(idChat).state());
                     return command.apply(update);
                 }

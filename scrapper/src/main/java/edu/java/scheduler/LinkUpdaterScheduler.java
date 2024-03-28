@@ -1,7 +1,6 @@
 package edu.java.scheduler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.example.dto.LinkParser;
 import edu.java.clients.BotClient;
 import edu.java.clients.GitHubClient;
 import edu.java.clients.StackOverflowClient;
@@ -19,8 +18,8 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.example.dto.LinkParser;
 import org.example.dto.request.SendUpdateRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -33,17 +32,18 @@ public class LinkUpdaterScheduler {
     private final JdbcLinkService jdbcLinkService;
 
     private final LinkUpdaterService linkUpdaterService;
-    @Autowired
     private final BotClient botClient;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
     private final GithubHandler githubHandler;
     private final StackOverflowHandler stackOverflowHandler;
 
+    private static final int DELAY = 5;
+
     @Scheduled(fixedDelayString = "#{scheduler.interval}")
     public void update() {
         OffsetDateTime time = OffsetDateTime.now();
-        List<LinkDto> linkDtoList = linkUpdaterService.findOldLinksToUpdate(time.minusMinutes(1));
+        List<LinkDto> linkDtoList = linkUpdaterService.findOldLinksToUpdate(time.minusMinutes(DELAY));
         for (var links : linkDtoList) {
             linkUpdaterService.check(links.getLinkId(), OffsetDateTime.now());
             String description = switch (links.getType()) {
@@ -91,7 +91,12 @@ public class LinkUpdaterScheduler {
                         .append(" удалили pull request.").append("\n");
                 } else if (Arrays.hashCode(repository.pullRequests()) != gitHubData.pullRequestsHash()) {
                     description.append(" В репозитории ").append(repository.repository().name())
-                        .append(" добавлен новый коммит.").append("\n");
+                        .append(" добавлен новый коммит ").append(" в pull request ")
+                        .append(repository.pullRequests()[0])
+                        .append(".\n");
+                } else if (Arrays.hashCode(repository.branches()) != gitHubData.branchesHash()) {
+                    description.append(" В репозитории ").append(repository.repository().name())
+                        .append(" добавлен новый коммит в ветку.").append("\n");
                 }
                 if (description.compareTo(startDescription) == 0) {
                     description.append(" Произошло какое-то обновление");
