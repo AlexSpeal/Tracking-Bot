@@ -28,8 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/links")
 public class ScrapperLinkController {
-    //@Qualifier("jdbcLinkService")
-    @Qualifier(value = "jpaLinkService")
+    @Qualifier("jdbcLinkService")
+    //@Qualifier(value = "jpaLinkService")
     @Autowired
     private LinkService linkService;
 

@@ -31,11 +31,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @SuppressWarnings("MultipleStringLiterals")
 public class LinkUpdaterScheduler {
-    @Qualifier("jpaLinkService")
+    @Qualifier("jdbcLinkService")
     @Autowired
     private LinkService linkService;
     //@Qualifier("jdbcLinkUpdaterService")
-    @Qualifier("jpaLinkUpdaterService")
+    @Qualifier("jdbcLinkUpdaterService")
     @Autowired
     private LinkUpdater linkUpdaterService;
     private final BotClient botClient;

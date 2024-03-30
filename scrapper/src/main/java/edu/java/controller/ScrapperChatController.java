@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/tg-chat")
 public class ScrapperChatController {
-    //@Qualifier(value = "jdbcTgChatService")
-    @Qualifier(value = "jpaChatService")
+    @Qualifier(value = "jdbcTgChatService")
+    //@Qualifier(value = "jpaChatService")
     @Autowired
     private TgChatService tgChatService;
 
