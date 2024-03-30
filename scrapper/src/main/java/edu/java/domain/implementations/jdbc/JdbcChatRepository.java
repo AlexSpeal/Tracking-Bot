@@ -1,6 +1,6 @@
-package edu.java.dao.implementations;
+package edu.java.domain.implementations.jdbc;
 
-import edu.java.dao.interfaces.ChatRepository;
+import edu.java.domain.interfaces.ChatRepository;
 import edu.java.dto.jdbc.ChatDto;
 import edu.java.dto.jdbc.StateDto;
 import edu.java.errors.ChatAlreadyExistsException;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @AllArgsConstructor
-public class JdbcChatDao implements ChatRepository {
+public class JdbcChatRepository implements ChatRepository {
 
     private final JdbcTemplate jdbcTemplate;
 

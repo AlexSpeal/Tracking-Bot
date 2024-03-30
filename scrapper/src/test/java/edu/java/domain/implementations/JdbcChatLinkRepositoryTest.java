@@ -1,5 +1,8 @@
-package edu.java.dao.implementations;
+package edu.java.domain.implementations;
 
+import edu.java.domain.implementations.jdbc.JdbcChatRepository;
+import edu.java.domain.implementations.jdbc.JdbcChatLinkRepository;
+import edu.java.domain.implementations.jdbc.JdbcLinkRepository;
 import edu.java.dto.jdbc.ChatDto;
 import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
@@ -17,13 +20,13 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertThrows;
 
-public class JdbcChatLinkDaoTest extends IntegrationTest {
+public class JdbcChatLinkRepositoryTest extends IntegrationTest {
     @Autowired
-    private JdbcChatLinkDao jdbcChatLinkDao;
+    private JdbcChatLinkRepository jdbcChatLinkRepository;
     @Autowired
-    private JdbcChatDao jdbcChatDao;
+    private JdbcChatRepository jdbcChatRepository;
     @Autowired
-    private JdbcLinkDao jdbcLinkDao;
+    private JdbcLinkRepository jdbcLinkRepository;
 
     private static final long CHAT_ID = 14L;
     private static final OffsetDateTime data1 =
@@ -50,14 +53,14 @@ public class JdbcChatLinkDaoTest extends IntegrationTest {
     @Transactional
     @Rollback
     void addTest() {
-        jdbcChatDao.add(chatDto);
-        jdbcLinkDao.add(linkDto);
+        jdbcChatRepository.add(chatDto);
+        jdbcLinkRepository.add(linkDto);
 
-        ChatLinkDto chatLink = new ChatLinkDto(CHAT_ID, jdbcLinkDao.findAll().getFirst().getLinkId());
-        jdbcChatLinkDao.add(chatLink);
+        ChatLinkDto chatLink = new ChatLinkDto(CHAT_ID, jdbcLinkRepository.findAll().getFirst().getLinkId());
+        jdbcChatLinkRepository.add(chatLink);
 
-        assertThat(jdbcChatLinkDao.findAll().size()).isEqualTo(1);
-        var exception = assertThrows(LinkWasTrackedException.class, () -> jdbcChatLinkDao.add(chatLink));
+        assertThat(jdbcChatLinkRepository.findAll().size()).isEqualTo(1);
+        var exception = assertThrows(LinkWasTrackedException.class, () -> jdbcChatLinkRepository.add(chatLink));
         assertThat(exception.getMessage()).isEqualTo("Данная ссылка уже отслеживается!");
     }
 
@@ -65,13 +68,13 @@ public class JdbcChatLinkDaoTest extends IntegrationTest {
     @Transactional
     @Rollback
     void removeTest() {
-        jdbcChatDao.add(chatDto);
-        jdbcLinkDao.add(linkDto);
-        ChatLinkDto chatLink = new ChatLinkDto(CHAT_ID, jdbcLinkDao.findAll().getFirst().getLinkId());
-        jdbcChatLinkDao.add(chatLink);
-        assertThat(jdbcChatLinkDao.findAll().size()).isEqualTo(1);
-        jdbcChatLinkDao.remove(chatLink);
-        assertThat(jdbcChatLinkDao.findAll().size()).isEqualTo(0);
+        jdbcChatRepository.add(chatDto);
+        jdbcLinkRepository.add(linkDto);
+        ChatLinkDto chatLink = new ChatLinkDto(CHAT_ID, jdbcLinkRepository.findAll().getFirst().getLinkId());
+        jdbcChatLinkRepository.add(chatLink);
+        assertThat(jdbcChatLinkRepository.findAll().size()).isEqualTo(1);
+        jdbcChatLinkRepository.remove(chatLink);
+        assertThat(jdbcChatLinkRepository.findAll().size()).isEqualTo(0);
     }
 
     @Test
@@ -79,16 +82,16 @@ public class JdbcChatLinkDaoTest extends IntegrationTest {
     @Rollback
     void findAll() throws URISyntaxException {
 
-        jdbcLinkDao.add(linkDto);
-        jdbcChatDao.add(chatDto);
-        jdbcLinkDao.add(linkDto2);
-        jdbcChatLinkDao.add(new ChatLinkDto(chatDto.getChatId(), jdbcLinkDao.findAll().getFirst().getLinkId()));
-        jdbcChatLinkDao.add(new ChatLinkDto(chatDto.getChatId(), jdbcLinkDao.findAll().getLast().getLinkId()));
+        jdbcLinkRepository.add(linkDto);
+        jdbcChatRepository.add(chatDto);
+        jdbcLinkRepository.add(linkDto2);
+        jdbcChatLinkRepository.add(new ChatLinkDto(chatDto.getChatId(), jdbcLinkRepository.findAll().getFirst().getLinkId()));
+        jdbcChatLinkRepository.add(new ChatLinkDto(chatDto.getChatId(), jdbcLinkRepository.findAll().getLast().getLinkId()));
         List<ChatLinkDto> chatLinkDtoList =
-            List.of(new ChatLinkDto(chatDto.getChatId(), jdbcLinkDao.findAll().getFirst()
-                .getLinkId()), new ChatLinkDto(chatDto.getChatId(), jdbcLinkDao.findAll().getLast()
+            List.of(new ChatLinkDto(chatDto.getChatId(), jdbcLinkRepository.findAll().getFirst()
+                .getLinkId()), new ChatLinkDto(chatDto.getChatId(), jdbcLinkRepository.findAll().getLast()
                 .getLinkId()));
-        assertThat(jdbcChatLinkDao.findAll()).isEqualTo(chatLinkDtoList);
+        assertThat(jdbcChatLinkRepository.findAll()).isEqualTo(chatLinkDtoList);
     }
 
 }

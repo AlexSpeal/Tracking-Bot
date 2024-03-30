@@ -1,6 +1,6 @@
-package edu.java.dao.implementations;
+package edu.java.domain.implementations.jdbc;
 
-import edu.java.dao.interfaces.LinkRepository;
+import edu.java.domain.interfaces.LinkRepository;
 import edu.java.dto.jdbc.LinkDto;
 import edu.java.errors.DuplicateLinkException;
 import java.net.URI;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @AllArgsConstructor
 @SuppressWarnings("MagicNumber")
-public class JdbcLinkDao implements LinkRepository {
+public class JdbcLinkRepository implements LinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
 

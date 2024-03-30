@@ -8,9 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 import org.example.dto.response.ApiErrorResponse;
 import org.example.dto.response.StateResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tg-chat")
-@AllArgsConstructor
 public class ScrapperChatController {
-    private final TgChatService tgChatService;
+    //@Qualifier(value = "jdbcTgChatService")
+    @Qualifier(value = "jpaChatService")
+    @Autowired
+    private TgChatService tgChatService;
 
     @Operation(summary = "Зарегистрировать чат")
     @ApiResponses(value = {

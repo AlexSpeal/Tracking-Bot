@@ -1,4 +1,4 @@
-package edu.java.dao.interfaces;
+package edu.java.domain.interfaces;
 
 import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
