@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
 
 class botTest {
     private static final String LINK_FIRST = "https://github.com/AlexSpeal/Tracking-Bot";
-    private static final String LINK_SECOND = "https://github.com/aleckbb";
     private static final Long ID = 12L;
     private static final WireMockServer server = new WireMockServer();
     ScrapperClient scrapperClient = new ScrapperClient(WebClient.builder().baseUrl("http://localhost:8080").build());
