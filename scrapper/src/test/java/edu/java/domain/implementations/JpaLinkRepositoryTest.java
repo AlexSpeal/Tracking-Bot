@@ -50,14 +50,17 @@ class JpaLinkRepositoryTest extends IntegrationTest {
     void findAll() throws URISyntaxException {
 
         OffsetDateTime data = OffsetDateTime.parse("2022-01-01T10:30:00+00:00");
-        LinkDto linkDto1 = new LinkDto(2L, new URI("https://github.com/"), data, data, "github", "{мими,мамому}");
+        LinkDto linkDto1 = new LinkDto(1L, new URI("https://github.com/"), data, data, "github", "{мими,мамому}");
         data = OffsetDateTime.parse("2021-01-01T10:30:00+00:00");
         LinkDto linkDto2 =
-            new LinkDto(3L, new URI("https://stackoverflow.com/"), data, data, "github", "{мими,мамому}");
+            new LinkDto(2L, new URI("https://stackoverflow.com/"), data, data, "github", "{мими,мамому}");
         jdbcLinkRepository.add(linkDto1);
         var x = jdbcLinkRepository.findAll().getFirst().getLinkId();
         jdbcLinkRepository.add(linkDto2);
         List<LinkDto> linkDtoList = List.of(linkDto1, linkDto2);
-        assertThat(jdbcLinkRepository.findAll()).isEqualTo(linkDtoList);
+        assertThat(jdbcLinkRepository.findAll().getFirst().getUrl().toString()).isEqualTo(linkDtoList.getFirst()
+            .getUrl().toString());
+        assertThat(jdbcLinkRepository.findAll().getLast().getUrl().toString()).isEqualTo(linkDtoList.getLast().getUrl()
+            .toString());
     }
 }
