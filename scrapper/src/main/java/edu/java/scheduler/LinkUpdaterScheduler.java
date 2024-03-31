@@ -20,8 +20,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.LinkParser;
 import org.example.dto.request.SendUpdateRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -31,13 +29,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @SuppressWarnings("MultipleStringLiterals")
 public class LinkUpdaterScheduler {
-    @Qualifier("jdbcLinkService")
-    @Autowired
-    private LinkService linkService;
-    //@Qualifier("jdbcLinkUpdaterService")
-    @Qualifier("jdbcLinkUpdaterService")
-    @Autowired
-    private LinkUpdater linkUpdaterService;
+    private final LinkService linkService;
+    private final LinkUpdater linkUpdaterService;
     private final BotClient botClient;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;

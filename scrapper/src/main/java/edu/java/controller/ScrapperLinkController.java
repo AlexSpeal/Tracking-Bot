@@ -14,7 +14,6 @@ import org.example.dto.response.ApiErrorResponse;
 import org.example.dto.response.LinkResponse;
 import org.example.dto.response.ListLinksResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/links")
 public class ScrapperLinkController {
-    //@Qualifier(value = "jpaLinkService")
-    @Qualifier("jdbcLinkService")
     @Autowired
     private LinkService linkService;
 

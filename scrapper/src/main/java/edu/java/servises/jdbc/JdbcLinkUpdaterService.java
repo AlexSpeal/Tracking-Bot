@@ -6,14 +6,10 @@ import edu.java.servises.interfaces.LinkUpdater;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkUpdaterService implements LinkUpdater {
-    @Autowired
-    private JdbcLinkRepository jdbcLinkRepository;
+    private final JdbcLinkRepository jdbcLinkRepository;
 
     @Override
     public void update(long linkId, OffsetDateTime time, String data) {

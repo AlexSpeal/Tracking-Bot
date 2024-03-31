@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Positive;
 import org.example.dto.response.ApiErrorResponse;
 import org.example.dto.response.StateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/tg-chat")
 public class ScrapperChatController {
-    @Qualifier(value = "jdbcTgChatService")
-    //@Qualifier(value = "jpaChatService")
     @Autowired
     private TgChatService tgChatService;
 

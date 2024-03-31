@@ -19,17 +19,12 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.response.LinkResponse;
 import org.example.dto.response.ListLinksResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 @Transactional
 public class JpaLinkService implements LinkService {
-    @Autowired
     private final JpaChatRepository jpaChatRepository;
-    @Autowired
     private final JpaLinkRepository jpaLinkRepository;
     private final GithubHandler githubHandler;
     private final StackOverflowHandler stackOverflowHandler;
@@ -43,14 +38,10 @@ public class JpaLinkService implements LinkService {
         if (!jpaLinkRepository.existsByUrl(url.toString())) {
             addLinkIfNotExist(tgChatId, url);
         } else {
-
-            jpaLinkRepository.findByUrl(url.toString()).getChats()
-                .add(chat);
             chat.getLinks().add(jpaLinkRepository.findByUrl(url.toString()));
         }
 
         jpaChatRepository.flush();
-        jpaLinkRepository.flush();
 
     }
 
@@ -100,9 +91,6 @@ public class JpaLinkService implements LinkService {
         chat.getLinks().remove(link);
         if (jpaLinkRepository.findByUrl(url.toString()).getChats().size() == 1) {
             jpaLinkRepository.deleteById(link.getLinkId());
-        } else {
-            jpaLinkRepository.findByUrl(url.toString()).getChats().remove(chat);
-
         }
         jpaLinkRepository.flush();
         jpaChatRepository.flush();

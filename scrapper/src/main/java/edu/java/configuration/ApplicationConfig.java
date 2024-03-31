@@ -17,7 +17,8 @@ public record ApplicationConfig(
     @Bean
     Scheduler scheduler,
     @Bean
-    DataSourceValues dataSourceValues
+    DataSourceValues dataSourceValues,
+    AccessType databaseAccessType
 ) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
@@ -27,5 +28,9 @@ public record ApplicationConfig(
     }
 
     public record DataSourceValues(String driverClassName, String url, String username, String password) {
+    }
+
+    public enum AccessType {
+        JDBC, JPA
     }
 }

@@ -6,18 +6,12 @@ import edu.java.servises.interfaces.LinkUpdater;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 @Transactional
 public class JpaLinkUpdaterService implements LinkUpdater {
-    @Autowired
-    private JpaLinkRepository jpaLinkService;
-    @Autowired
-    private JpaLinkRepository jpaLinkRepository;
+    private final JpaLinkRepository jpaLinkRepository;
 
     @Override
     public void update(long linkId, OffsetDateTime time, String data) {

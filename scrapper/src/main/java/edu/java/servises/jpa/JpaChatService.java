@@ -9,17 +9,12 @@ import edu.java.servises.interfaces.TgChatService;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.response.StateResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 @Transactional
 public class JpaChatService implements TgChatService {
-    @Autowired
     private final JpaChatRepository jpaChatRepository;
-    @Autowired
     private final JpaLinkRepository jpaLinkRepository;
 
     @Override

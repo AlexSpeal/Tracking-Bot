@@ -1,6 +1,6 @@
 package edu.java.servises.jdbc;
 
-import edu.java.domain.implementations.jdbc.JdbcChatLinkRepository;
+import edu.java.domain.interfaces.ChatLinkRepository;
 import edu.java.domain.interfaces.LinkRepository;
 import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
@@ -17,13 +17,11 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.response.LinkResponse;
 import org.example.dto.response.ListLinksResponse;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
     private final LinkRepository jdbcLinkRepository;
-    private final JdbcChatLinkRepository jdbcChatLinkRepository;
+    private final ChatLinkRepository jdbcChatLinkRepository;
     private final GithubHandler githubHandler;
     private final StackOverflowHandler stackOverflowHandler;
     private final static String GITHUB = "github";
