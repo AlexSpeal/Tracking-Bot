@@ -8,6 +8,14 @@ app:
     interval: 10s
     force-check-delay: 10s
   database-access-type: jpa
+  retry-config:
+    retry-type: constant
+    attempts: 5
+    min-delay: 100
+    status-codes:
+      - 500
+      - 502
+      - 404
 
 
 

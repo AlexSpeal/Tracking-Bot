@@ -1,35 +1,38 @@
 package edu.java.clients;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import edu.java.configuration.BotClientConfiguration;
-import org.example.dto.request.SendUpdateRequest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.ScrapperApplication;
 import java.util.ArrayList;
 import java.util.List;
+import org.example.dto.request.SendUpdateRequest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
+@WireMockTest
 public class BotUnitTest {
-    private WireMockServer wireMockServer;
+    @Autowired
     private BotClient client;
 
-    @BeforeEach
-    public void setup() {
-        wireMockServer = new WireMockServer();
-        wireMockServer.start();
-        configureFor("localhost", wireMockServer.port());
-        client = new BotClientConfiguration().getBotClient("http://localhost:" + wireMockServer.port());
-    }
+    @Autowired
+    GitHubClient gitHubClient;
+    @RegisterExtension
+    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+        .options(wireMockConfig().dynamicPort().dynamicPort()).build();
 
-    @AfterEach
-    public void teardown() {
-        wireMockServer.stop();
+    @DynamicPropertySource
+    public static void setUpMockBaseUrl(DynamicPropertyRegistry registry) {
+        registry.add("app.base-url-bot", wireMockExtension::baseUrl);
     }
 
     @Test
@@ -37,7 +40,7 @@ public class BotUnitTest {
         List<Long> list = new ArrayList<>();
         list.add(0, 2L);
         var request = new SendUpdateRequest(1L, "https://api.github.com", "лол", list);
-        stubFor(post(urlEqualTo("/updates"))
+        wireMockExtension.stubFor(post(urlEqualTo("/updates"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")

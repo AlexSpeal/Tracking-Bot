@@ -1,21 +1,24 @@
 package edu.java.clients;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.ScrapperApplication;
 import edu.java.dto.jdbc.github.Github;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.server.ResponseStatusException;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
 @WireMockTest
 class GitHubClientTest {
     static final String BODY_REQUEST = "{\"name\": \"vkusnoe_brevno\",\"pushed_at\": \"123\"}";
@@ -26,38 +29,35 @@ class GitHubClientTest {
     static final String URL3 = "/repos/AlexBebrovich/Plotina/pulls";
     static final String ERROR_404 = "404 NOT_FOUND \"Link is not valid\"";
     static final String ERROR_500 = "500 INTERNAL_SERVER_ERROR \"Internal Server Error\"";
-    GitHubClient gitHubClient = new GitHubClient(WebClient.builder().baseUrl("http://localhost:8080").build());
-    private static final WireMockServer wireMockServer = new WireMockServer();
+    @Autowired
+    GitHubClient gitHubClient;
+    @RegisterExtension
+    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+        .options(wireMockConfig().dynamicPort().dynamicPort()).build();
 
-    @AfterAll
-    static void tearDown() {
-        wireMockServer.stop();
-    }
-
-    @BeforeAll
-    static void serverUp() {
-        wireMockServer.start();
-        configureFor("localhost", 8080);
+    @DynamicPropertySource
+    public static void setUpMockBaseUrl(DynamicPropertyRegistry registry) {
+        registry.add("app.base-url.git-hub-base-url", wireMockExtension::baseUrl);
     }
 
     @Test
     @DisplayName("regular work")
     public void testRegWork() {
-        stubFor(WireMock.get(WireMock.urlEqualTo(
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlEqualTo(
             URL)
         ).willReturn(aResponse()
             .withBody(BODY_REQUEST)
             .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
         ));
 
-        stubFor(WireMock.get(WireMock.urlEqualTo(
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlEqualTo(
             URL2)
         ).willReturn(aResponse()
             .withBody(BODY_REQUEST2)
             .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
         ));
 
-        stubFor(WireMock.get(WireMock.urlEqualTo(
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlEqualTo(
             URL3)
         ).willReturn(aResponse()
             .withBody(BODY_REQUEST3)
@@ -70,7 +70,7 @@ class GitHubClientTest {
     @Test
     @DisplayName("link error")
     public void testLinkError() {
-        stubFor(WireMock.get(WireMock.urlEqualTo(
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlEqualTo(
             URL)
         ).willReturn(aResponse()
             .withBody(BODY_REQUEST)
@@ -89,7 +89,7 @@ class GitHubClientTest {
     @Test
     @DisplayName("server error")
     public void testServerError() {
-        stubFor(WireMock.get(WireMock.urlEqualTo(
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlEqualTo(
             URL)
         ).willReturn(aResponse()
             .withBody(BODY_REQUEST).withStatus(500)

@@ -4,6 +4,7 @@ import org.example.dto.request.AddLinkRequest;
 import org.example.dto.response.LinkResponse;
 import org.example.dto.response.ListLinksResponse;
 import org.example.dto.response.StateResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -11,9 +12,12 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 @SuppressWarnings("MultipleStringLiterals")
 public class ScrapperClient {
+    @Autowired
+    private Retry retry;
     private final WebClient webClient;
 
     public ScrapperClient(WebClient webClient) {
@@ -32,7 +36,7 @@ public class ScrapperClient {
                 error -> Mono.error(new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
                 ))
-            ).bodyToMono(Void.class).block();
+            ).bodyToMono(Void.class).retryWhen(retry).block();
     }
 
     public void deleteChat(Long chat) {
@@ -47,7 +51,7 @@ public class ScrapperClient {
                 error -> Mono.error(new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
                 ))
-            ).bodyToMono(Void.class).block();
+            ).bodyToMono(Void.class).retryWhen(retry).block();
     }
 
     public ListLinksResponse getLinks(Long chat) {
@@ -62,7 +66,7 @@ public class ScrapperClient {
                 error -> Mono.error(new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
                 ))
-            ).bodyToMono(ListLinksResponse.class).block();
+            ).bodyToMono(ListLinksResponse.class).retryWhen(retry).block();
     }
 
     public LinkResponse setLink(Long chat, AddLinkRequest addLinkRequest) {
@@ -78,7 +82,7 @@ public class ScrapperClient {
                 error -> Mono.error(new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
                 ))
-            ).bodyToMono(LinkResponse.class).block();
+            ).bodyToMono(LinkResponse.class).retryWhen(retry).block();
     }
 
     public LinkResponse deleteLink(Long chat, AddLinkRequest addLinkRequest) {
@@ -94,7 +98,7 @@ public class ScrapperClient {
                 error -> Mono.error(new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
                 ))
-            ).bodyToMono(LinkResponse.class).block();
+            ).bodyToMono(LinkResponse.class).retryWhen(retry).block();
     }
 
     public void setState(Long chat, String state) {
@@ -110,7 +114,7 @@ public class ScrapperClient {
                 error -> Mono.error(new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
                 ))
-            ).bodyToMono(Void.class).block();
+            ).bodyToMono(Void.class).retryWhen(retry).block();
     }
 
     public StateResponse getState(Long chat) {
@@ -125,6 +129,6 @@ public class ScrapperClient {
                 error -> Mono.error(new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
                 ))
-            ).bodyToMono(StateResponse.class).block();
+            ).bodyToMono(StateResponse.class).retryWhen(retry).block();
     }
 }
