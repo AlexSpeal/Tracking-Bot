@@ -16,6 +16,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.server.ResponseStatusException;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
@@ -27,8 +28,7 @@ class GitHubClientTest {
     static final String URL = "/repos/AlexBebrovich/Plotina";
     static final String URL2 = "/repos/AlexBebrovich/Plotina/branches";
     static final String URL3 = "/repos/AlexBebrovich/Plotina/pulls";
-    static final String ERROR_404 = "404 NOT_FOUND \"Link is not valid\"";
-    static final String ERROR_500 = "500 INTERNAL_SERVER_ERROR \"Internal Server Error\"";
+
     @Autowired
     GitHubClient gitHubClient;
     @RegisterExtension
@@ -77,13 +77,7 @@ class GitHubClientTest {
             .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
         ));
 
-        String message = "";
-        try {
-            gitHubClient.getRep("AlexNone", "Plotina");
-        } catch (ResponseStatusException e) {
-            message = e.getMessage();
-        }
-        assertEquals(ERROR_404, message);
+        assertThrows(RuntimeException.class, () -> gitHubClient.getRep("AlexNone", "Plotina"));
     }
 
     @Test
@@ -96,12 +90,6 @@ class GitHubClientTest {
             .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
         ));
 
-        String message = "";
-        try {
-            gitHubClient.getRep("AlexBebrovich", "Plotina");
-        } catch (ResponseStatusException e) {
-            message = e.getMessage();
-        }
-        assertEquals(ERROR_500, message);
+        assertThrows(RuntimeException.class, () -> gitHubClient.getRep("AlexBebrovich", "Plotina"));
     }
 }

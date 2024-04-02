@@ -10,6 +10,7 @@ import edu.java.bot.commands.commandsExecute.Help;
 import edu.java.bot.commands.commandsExecute.List;
 import edu.java.bot.commands.commandsExecute.Start;
 import edu.java.bot.commands.commandsExecute.Track;
+import edu.java.bot.commands.commandsExecute.Unsubscribe;
 import edu.java.bot.commands.commandsExecute.Untrack;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,9 @@ public class CommandsHandler {
             "/track",
             new Track(scrapperClient),
             "/untrack",
-            new Untrack(scrapperClient)
+            new Untrack(scrapperClient),
+            "/unsubscribe",
+            new Unsubscribe(scrapperClient)
         );
         this.commandsAccess =
             Map.of(ADD, new AddLinkAcceptor(scrapperClient), DEL, new RemoveLinkAcceptor(scrapperClient));
@@ -45,24 +48,25 @@ public class CommandsHandler {
 
     public SendMessage commandsHandle(Update update) {
         long idChat = update.message().chat().id();
-        String username = update.message().chat().username();
         String text = update.message().text();
         String answer = "Неизвестная команда";
-        if (text != null) {
-            try {
-                scrapperClient.createChat(idChat, username);
-                scrapperClient.deleteChat(idChat);
-            } catch (Exception e) {
+        Command command;
+        if (scrapperClient.isRegister(idChat)) {
+
+            if (!scrapperClient.getState(idChat).state().equals(NONE)) {
                 if (text.equals("/cancel")) {
                     answer = "Вы вышли в меню!";
                     scrapperClient.setState(idChat, NONE);
-                } else if (!scrapperClient.getState(idChat).state().equals(NONE)) {
-                    Command command = commandsAccess.get(scrapperClient.getState(idChat).state());
+                } else {
+                    command = commandsAccess.get(scrapperClient.getState(idChat).state());
                     return command.apply(update);
                 }
 
             }
-            Command command = commandsExecute.get(text);
+
+        }
+        if (text != null) {
+            command = commandsExecute.get(text);
             if (command != null) {
                 return command.apply(update);
             }

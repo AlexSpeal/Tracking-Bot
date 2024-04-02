@@ -39,8 +39,7 @@ import static org.mockito.Mockito.when;
 class botTest {
     private static final String LINK_FIRST = "https://github.com/AlexSpeal/Tracking-Bot";
     private static final Long ID = 12L;
-    @Autowired
-    ScrapperClient scrapperClient;
+
     @RegisterExtension
     static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
         .options(wireMockConfig().dynamicPort().dynamicPort()).build();
@@ -53,7 +52,9 @@ class botTest {
     @Test
     @DisplayName("Test /start command")
     void startCommandTest() {
-        Command startCommand = new Start(scrapperClient);
+        ScrapperClient scrapperClient1 = mock(ScrapperClient.class);
+        Command startCommand = new Start(scrapperClient1);
+        when(scrapperClient1.isRegister(anyLong())).thenReturn(false);
         wireMockExtension.stubFor(post(urlEqualTo("/tg-chat/1")).willReturn(aResponse().withStatus(200)));
         Update update = mock(Update.class);
         when(update.message()).thenReturn(mock(Message.class));
@@ -69,7 +70,8 @@ class botTest {
     @Test
     @DisplayName("Test /test with authorization")
     void CommandsHandlerTest() {
-        Command startCommand = new Start(scrapperClient);
+        ScrapperClient scrapperClient1 = mock(ScrapperClient.class);
+        Command startCommand = new Start(scrapperClient1);
         wireMockExtension.stubFor(post(urlEqualTo("/tg-chat/1")).willReturn(aResponse().withStatus(500)));
         Update update = mock(Update.class);
         when(update.message()).thenReturn(mock(Message.class));
@@ -77,6 +79,7 @@ class botTest {
         when(update.message().chat()).thenReturn(mock(Chat.class));
         when(update.message().chat().username()).thenReturn("AlexSpeal");
         when(update.message().chat().id()).thenReturn(1L);
+        when(scrapperClient1.isRegister(anyLong())).thenReturn(true);
         SendMessage response = startCommand.apply(update);
         assertThat("Вы уже зарегистрированы!").isEqualTo(response.getParameters().get("text"));
     }
@@ -137,6 +140,7 @@ class botTest {
         when(update.message().text()).thenReturn(LINK_FIRST);
         when(update.message().chat()).thenReturn(mock(Chat.class));
         when(update.message().chat().id()).thenReturn(ID);
+        when(scrapperClient1.isRegister(anyLong())).thenReturn(true);
         SendMessage response = list.apply(update);
         assertThat("1. https://github.com/AlexSpeal/Tracking-Bot\n" + "\n").isEqualTo(response.getParameters()
             .get("text"));
@@ -157,6 +161,7 @@ class botTest {
         when(update.message().text()).thenReturn(LINK_FIRST);
         when(update.message().chat()).thenReturn(mock(Chat.class));
         when(update.message().chat().id()).thenReturn(ID);
+        when(scrapperClient1.isRegister(anyLong())).thenReturn(true);
         SendMessage response = list.apply(update);
         assertThat("Отслеживаемых ссылок нет!").isEqualTo(response.getParameters()
             .get("text"));

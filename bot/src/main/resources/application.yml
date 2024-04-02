@@ -8,6 +8,7 @@ app:
     status-codes:
       - 500
       - 502
+      - 503
       - 404
 
 spring:

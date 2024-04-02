@@ -19,12 +19,7 @@ public class Track implements Command {
     @Override
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
-        String username = update.message().chat().username();
-        try {
-            scrapperClient.createChat(idChat, username);
-            scrapperClient.deleteChat(idChat);
-
-        } catch (Exception e) {
+        if (scrapperClient.isRegister(idChat)) {
             scrapperClient.setState(idChat, "ADD");
             return new SendMessage(idChat, "Вставьте ссылку ( /cancel для отмены ввода)");
         }

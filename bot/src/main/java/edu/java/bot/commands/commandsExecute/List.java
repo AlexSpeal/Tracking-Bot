@@ -20,12 +20,7 @@ public class List implements Command {
     @Override
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
-        String username = update.message().chat().username();
-        try {
-            scrapperClient.createChat(idChat, username);
-            scrapperClient.deleteChat(idChat);
-
-        } catch (Exception e) {
+        if (scrapperClient.isRegister(idChat)) {
             ListLinksResponse links = scrapperClient.getLinks(update.message().chat().id());
             StringBuilder resultLinks = new StringBuilder();
             if (links.size().equals(0)) {
@@ -37,7 +32,6 @@ public class List implements Command {
             }
             return new SendMessage(idChat, resultLinks.toString());
         }
-
         return new SendMessage(idChat, "Вы не авторизованы!");
 
     }

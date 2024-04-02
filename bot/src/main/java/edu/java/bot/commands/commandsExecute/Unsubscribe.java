@@ -8,22 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Start implements Command {
+public class Unsubscribe implements Command {
+    @Autowired
     private final ScrapperClient scrapperClient;
 
-    @Autowired
-    public Start(ScrapperClient scrapperClient) {
+    public Unsubscribe(ScrapperClient scrapperClient) {
         this.scrapperClient = scrapperClient;
     }
 
     @Override
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
-        String username = update.message().chat().username();
+
         if (scrapperClient.isRegister(idChat)) {
-            return new SendMessage(idChat, "Вы уже зарегистрированы!");
+            scrapperClient.deleteChat(idChat);
+            return new SendMessage(idChat, "Вы отписались от бота. Жаль...");
         }
-        scrapperClient.createChat(idChat, username);
-        return new SendMessage(idChat, "Добро пожаловать, " + username);
+        return new SendMessage(idChat, "Для отписки нужна подписка)");
     }
 }

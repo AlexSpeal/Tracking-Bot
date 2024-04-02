@@ -51,6 +51,11 @@ public class JdbcTgChatService implements TgChatService {
     }
 
     @Override
+    public Boolean isRegister(long tgChatId) {
+        return jdbcChatRepository.isRegister(tgChatId);
+    }
+
+    @Override
     public StateResponse getState(long tgChatId) {
         return new StateResponse(jdbcChatRepository.getState(tgChatId));
     }

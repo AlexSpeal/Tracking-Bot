@@ -19,13 +19,8 @@ public class Untrack implements Command {
     @Override
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
-        String username = update.message().chat().username();
         String answer = "Список пуст, ничего удалять не нужно!";
-        try {
-            scrapperClient.createChat(idChat, username);
-            scrapperClient.deleteChat(idChat);
-
-        } catch (Exception e) {
+        if (scrapperClient.isRegister(idChat)) {
             if (!scrapperClient.getLinks(idChat).links().isEmpty()) {
                 scrapperClient.setState(idChat, "DEL");
                 answer = "Вставьте ссылку ( /cancel для отмены ввода)";

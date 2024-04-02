@@ -9,5 +9,7 @@ public interface TgChatService {
 
     void setState(long tgChatId, String state);
 
+    Boolean isRegister(long tgChatId);
+
     StateResponse getState(long tgChatId);
 }

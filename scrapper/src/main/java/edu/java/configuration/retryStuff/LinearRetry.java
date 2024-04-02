@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import org.reactivestreams.Publisher;
 import org.springframework.retry.RetryException;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
@@ -20,8 +20,7 @@ public class LinearRetry extends Retry {
     public LinearRetry(int maxAttempts, Duration minDelay, List<Integer> statusCodes) {
         this.maxAttempts = maxAttempts;
         this.minDelay = minDelay;
-        filter = throwable -> throwable instanceof WebClientResponseException
-            && statusCodes.contains(((WebClientResponseException) throwable).getStatusCode().value());
+        filter = throwable -> statusCodes.contains(((ResponseStatusException) throwable).getStatusCode().value());
     }
 
     @Override

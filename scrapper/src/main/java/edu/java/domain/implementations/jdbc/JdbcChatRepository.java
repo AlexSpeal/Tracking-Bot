@@ -55,6 +55,13 @@ public class JdbcChatRepository implements ChatRepository {
             .getLast().getState();
     }
 
+    @Override
+    public Boolean isRegister(Long id) {
+        return jdbcTemplate.queryForObject(
+            "SELECT EXISTS(SELECT chat_id FROM chat WHERE chat_id = ?)", Boolean.class, id
+        );
+    }
+
     @Transactional
     @Override
     public List<ChatDto> findAll() {
