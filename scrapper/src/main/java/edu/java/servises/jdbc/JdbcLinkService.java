@@ -6,7 +6,6 @@ import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
 import edu.java.dto.jdbc.github.Github;
 import edu.java.dto.jdbc.stackOverflow.Question;
-import edu.java.errors.LinkWasNotTrackedException;
 import edu.java.servises.handlers.GithubHandler;
 import edu.java.servises.handlers.StackOverflowHandler;
 import edu.java.servises.interfaces.LinkService;
@@ -15,6 +14,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import errors.LinkWasNotTrackedException;
 import org.example.dto.response.LinkResponse;
 import org.example.dto.response.ListLinksResponse;
 

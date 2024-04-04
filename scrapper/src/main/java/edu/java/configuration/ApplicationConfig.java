@@ -21,6 +21,7 @@ public record ApplicationConfig(
     DataSourceValues dataSourceValues,
     AccessType databaseAccessType,
     RetryConfig retryConfig
+    /*BucketConfig bucketConfig*/
 ) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
@@ -41,5 +42,8 @@ public record ApplicationConfig(
             CONSTANT, LINEAR, EXPONENTIAL
         }
     }
+
+    /*public record BucketConfig(int capacity, int refill, @NotNull Duration timeout) {
+    }*/
 
 }

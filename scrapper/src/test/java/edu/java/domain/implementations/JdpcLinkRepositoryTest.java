@@ -2,12 +2,13 @@ package edu.java.domain.implementations;
 
 import edu.java.domain.implementations.jdbc.JdbcLinkRepository;
 import edu.java.dto.jdbc.LinkDto;
-import edu.java.errors.DuplicateLinkException;
+
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import errors.DuplicateLinkException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;

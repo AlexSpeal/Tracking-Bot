@@ -1,22 +1,22 @@
 package edu.java.domain.implementations;
 
-import edu.java.domain.implementations.jdbc.JdbcChatRepository;
 import edu.java.domain.implementations.jdbc.JdbcChatLinkRepository;
+import edu.java.domain.implementations.jdbc.JdbcChatRepository;
 import edu.java.domain.implementations.jdbc.JdbcLinkRepository;
 import edu.java.dto.jdbc.ChatDto;
 import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
-import edu.java.errors.LinkWasTrackedException;
 import edu.java.scrapper.IntegrationTest;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
+import errors.LinkWasTrackedException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertThrows;
 

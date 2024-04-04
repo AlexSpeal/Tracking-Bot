@@ -20,7 +20,16 @@ app:
 
 
 
+
 spring:
+  cache:
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+    cache-names:
+      - rate-limit-buckets-scrapper
+    caffeine:
+      spec: maximumSize=5,expireAfterAccess=120s
+
   liquibase:
     enabled: false
   application:
@@ -37,6 +46,20 @@ spring:
         enable_lazy_load_no_trans: true
 
 
+bucket4j:
+  cache-to-use: jcache
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets-scrapper
+      url: /.*
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"exceptionMessage\": \"Превышен лимит запросов. Попробуйте позже!\" }"
+      rate-limits:
+        - cache-key: "getHeader('X-Forwarded-For')"
+          bandwidths:
+            - capacity: 1
+              time: 1
+              unit: minutes
+              refill-speed: interval
 
 server:
   port: 8080

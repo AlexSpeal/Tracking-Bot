@@ -3,7 +3,7 @@ package edu.java.domain.implementations.jdbc;
 import edu.java.domain.interfaces.ChatRepository;
 import edu.java.dto.jdbc.ChatDto;
 import edu.java.dto.jdbc.StateDto;
-import edu.java.errors.ChatAlreadyExistsException;
+import errors.ChatAlreadyExistsException;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;

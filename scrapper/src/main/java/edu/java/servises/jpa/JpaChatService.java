@@ -3,11 +3,11 @@ package edu.java.servises.jpa;
 import edu.java.domain.implementations.jpa.JpaChatRepository;
 import edu.java.domain.implementations.jpa.JpaLinkRepository;
 import edu.java.entities.ChatEntity;
-import edu.java.errors.ChatAlreadyExistsException;
-import edu.java.errors.ChatNotExistsException;
 import edu.java.servises.interfaces.TgChatService;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
+import errors.ChatAlreadyExistsException;
+import errors.ChatNotExistsException;
 import org.example.dto.response.StateResponse;
 import org.springframework.transaction.annotation.Transactional;
 

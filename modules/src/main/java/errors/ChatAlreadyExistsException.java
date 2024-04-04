@@ -1,4 +1,4 @@
-package edu.java.errors;
+package errors;
 
 public class ChatAlreadyExistsException extends RuntimeException {
     public ChatAlreadyExistsException(String message) {

@@ -10,6 +10,7 @@ app:
       - 502
       - 503
       - 404
+      - 429
 
 spring:
   application:

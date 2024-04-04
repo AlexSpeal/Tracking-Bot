@@ -1,5 +1,7 @@
 package edu.java.bot.client;
 
+import errors.TooManyRequestsException;
+import lombok.extern.slf4j.Slf4j;
 import org.example.dto.request.AddLinkRequest;
 import org.example.dto.response.LinkResponse;
 import org.example.dto.response.ListLinksResponse;
@@ -14,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
+@Slf4j
 @SuppressWarnings("MultipleStringLiterals")
 public class ScrapperClient {
     @Autowired
@@ -120,15 +123,8 @@ public class ScrapperClient {
     public StateResponse getState(Long chat) {
         return webClient.get().uri("/tg-chat/state/{id}", chat).accept(MediaType.APPLICATION_JSON)
             .retrieve().onStatus(
-                HttpStatusCode::is4xxClientError,
-                error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Link is not valid"
-                ))
-            ).onStatus(
-                HttpStatusCode::is5xxServerError,
-                error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
-                ))
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                error -> Mono.error(new TooManyRequestsException("to many requests"))
             ).bodyToMono(StateResponse.class).retryWhen(retry).block();
     }
 

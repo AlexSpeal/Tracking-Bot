@@ -2,7 +2,7 @@ package edu.java.domain.implementations.jdbc;
 
 import edu.java.domain.interfaces.LinkRepository;
 import edu.java.dto.jdbc.LinkDto;
-import edu.java.errors.DuplicateLinkException;
+import errors.DuplicateLinkException;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
