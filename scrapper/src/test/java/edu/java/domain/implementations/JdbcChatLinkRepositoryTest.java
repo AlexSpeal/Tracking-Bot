@@ -15,11 +15,12 @@ import java.time.ZoneOffset;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertThrows;
-
+@DirtiesContext
 public class JdbcChatLinkRepositoryTest extends IntegrationTest {
     @Autowired
     private JdbcChatLinkRepository jdbcChatLinkRepository;

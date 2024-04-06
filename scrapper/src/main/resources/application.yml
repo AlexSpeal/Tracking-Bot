@@ -11,15 +11,12 @@ app:
   retry-config:
     retry-type: constant
     attempts: 5
-    min-delay: 100
+    min-delay: 1m
     status-codes:
       - 500
       - 502
       - 503
       - 404
-
-
-
 
 spring:
   cache:
@@ -28,7 +25,7 @@ spring:
     cache-names:
       - rate-limit-buckets-scrapper
     caffeine:
-      spec: maximumSize=5,expireAfterAccess=120s
+      spec: maximumSize=10000,expireAfterAccess=1m
 
   liquibase:
     enabled: false
@@ -54,9 +51,9 @@ bucket4j:
       url: /.*
       http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"exceptionMessage\": \"Превышен лимит запросов. Попробуйте позже!\" }"
       rate-limits:
-        - cache-key: "getHeader('X-Forwarded-For')"
+        - cache-key: "getHeader('X-api-key')"
           bandwidths:
-            - capacity: 1
+            - capacity: 100
               time: 1
               unit: minutes
               refill-speed: interval

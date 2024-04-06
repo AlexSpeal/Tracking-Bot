@@ -13,11 +13,12 @@ import org.example.dto.response.ListLinksResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
+@DirtiesContext
 public class JpaLinkServiceTest extends IntegrationTest {
     @Autowired TgChatService tgChatService;
     @Autowired LinkService linkService;

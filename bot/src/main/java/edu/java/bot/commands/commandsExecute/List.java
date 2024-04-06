@@ -20,6 +20,7 @@ public class List implements Command {
     @Override
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
+
         if (scrapperClient.isRegister(idChat)) {
             ListLinksResponse links = scrapperClient.getLinks(update.message().chat().id());
             StringBuilder resultLinks = new StringBuilder();

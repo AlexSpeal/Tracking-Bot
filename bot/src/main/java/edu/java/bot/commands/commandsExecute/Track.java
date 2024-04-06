@@ -19,10 +19,12 @@ public class Track implements Command {
     @Override
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
+
         if (scrapperClient.isRegister(idChat)) {
             scrapperClient.setState(idChat, "ADD");
             return new SendMessage(idChat, "Вставьте ссылку ( /cancel для отмены ввода)");
         }
         return new SendMessage(idChat, "Вы не авторизованы!");
+
     }
 }

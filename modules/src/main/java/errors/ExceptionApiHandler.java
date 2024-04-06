@@ -35,16 +35,4 @@ public class ExceptionApiHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(TooManyRequestsException.class)
-    public ResponseEntity<ApiErrorResponse> toManyRequestsException(TooManyRequestsException exception) {
-        String stackTrace = ExceptionUtils.getStackTrace(exception);
-        var response = new ApiErrorResponse(
-            "Not Found",
-            "404", exception.getClass().getSimpleName(),
-            exception.getMessage(), new String[] {stackTrace}
-
-        );
-
-        return ResponseEntity.status(429).body(response);
-    }
 }

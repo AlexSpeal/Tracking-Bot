@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.util.retry.Retry;
 
 @Slf4j
@@ -15,9 +15,9 @@ public class ExponentialRetry {
     @Bean
     public Retry backoffRetry(ApplicationConfig applicationConfig) {
         return Retry.backoff(applicationConfig.retryConfig().attempts(), applicationConfig.retryConfig().minDelay())
-            .filter(throwable ->
-                applicationConfig.retryConfig().statusCodes()
-                    .contains(((ResponseStatusException) throwable).getStatusCode().value()))
+            .filter(throwable -> throwable instanceof WebClientResponseException
+                && applicationConfig.retryConfig().statusCodes()
+                .contains(((WebClientResponseException) throwable).getStatusCode().value()))
             .doBeforeRetry(retrySignal -> log.info("retrying... -{}", retrySignal.totalRetries()));
     }
 }

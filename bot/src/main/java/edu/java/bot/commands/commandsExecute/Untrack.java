@@ -19,6 +19,7 @@ public class Untrack implements Command {
     @Override
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
+
         String answer = "Список пуст, ничего удалять не нужно!";
         if (scrapperClient.isRegister(idChat)) {
             if (!scrapperClient.getLinks(idChat).links().isEmpty()) {
@@ -29,5 +30,6 @@ public class Untrack implements Command {
             return new SendMessage(idChat, answer);
         }
         return new SendMessage(idChat, "Вы не авторизованы!");
+
     }
 }

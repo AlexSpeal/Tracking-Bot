@@ -30,45 +30,39 @@ public class ScrapperClient {
     public void createChat(Long chat, String username) {
         webClient.post().uri("/tg-chat/{id}", chat).accept(MediaType.APPLICATION_JSON)
             .body(Mono.just(username), String.class).retrieve().onStatus(
-                HttpStatusCode::is4xxClientError,
-                error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Link is not valid"
-                ))
-            ).onStatus(
                 HttpStatusCode::is5xxServerError,
                 error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера"
                 ))
+            ).onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                error -> Mono.error(new TooManyRequestsException("Слишком много запросов"))
             ).bodyToMono(Void.class).retryWhen(retry).block();
     }
 
     public void deleteChat(Long chat) {
         webClient.delete().uri("/tg-chat/{id}", chat).accept(MediaType.APPLICATION_JSON)
             .retrieve().onStatus(
-                HttpStatusCode::is4xxClientError,
-                error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Link is not valid"
-                ))
-            ).onStatus(
                 HttpStatusCode::is5xxServerError,
                 error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера"
                 ))
+            ).onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                error -> Mono.error(new TooManyRequestsException("Слишком много запросов"))
             ).bodyToMono(Void.class).retryWhen(retry).block();
     }
 
     public ListLinksResponse getLinks(Long chat) {
         return webClient.get().uri("/links").accept(MediaType.APPLICATION_JSON)
             .header("Tg-Chat-Id", chat.toString()).retrieve().onStatus(
-                HttpStatusCode::is4xxClientError,
-                error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Link is not valid"
-                ))
-            ).onStatus(
                 HttpStatusCode::is5xxServerError,
                 error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера"
                 ))
+            ).onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                error -> Mono.error(new TooManyRequestsException("Слишком много запросов"))
             ).bodyToMono(ListLinksResponse.class).retryWhen(retry).block();
     }
 
@@ -76,15 +70,13 @@ public class ScrapperClient {
         return webClient.post().uri("/links").accept(MediaType.APPLICATION_JSON)
             .header("Tg-Chat-Id", chat.toString()).body(Mono.just(addLinkRequest), AddLinkRequest.class)
             .retrieve().onStatus(
-                HttpStatusCode::is4xxClientError,
-                error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Link is not valid"
-                ))
-            ).onStatus(
                 HttpStatusCode::is5xxServerError,
                 error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера"
                 ))
+            ).onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                error -> Mono.error(new TooManyRequestsException("Слишком много запросов"))
             ).bodyToMono(LinkResponse.class).retryWhen(retry).block();
     }
 
@@ -92,39 +84,40 @@ public class ScrapperClient {
         return webClient.method(HttpMethod.DELETE).uri("/links").accept(MediaType.APPLICATION_JSON)
             .header("Tg-Chat-Id", chat.toString()).body(Mono.just(addLinkRequest), AddLinkRequest.class)
             .retrieve().onStatus(
-                HttpStatusCode::is4xxClientError,
-                error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Link is not valid"
-                ))
-            ).onStatus(
                 HttpStatusCode::is5xxServerError,
                 error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера"
                 ))
+            ).onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                error -> Mono.error(new TooManyRequestsException("Слишком много запросов"))
             ).bodyToMono(LinkResponse.class).retryWhen(retry).block();
     }
 
     public void setState(Long chat, String state) {
-        webClient.post().uri("/tg-chat/state/{id}", chat, state).accept(MediaType.APPLICATION_JSON)
-            .body(Mono.just(state), String.class)
+        webClient.post().uri("/tg-chat/state", chat, state).accept(MediaType.APPLICATION_JSON)
+            .header("Tg-Chat-Id", chat.toString()).body(Mono.just(state), String.class)
             .retrieve().onStatus(
-                HttpStatusCode::is4xxClientError,
-                error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Link is not valid"
-                ))
-            ).onStatus(
                 HttpStatusCode::is5xxServerError,
                 error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера"
                 ))
+            ).onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                error -> Mono.error(new TooManyRequestsException("Слишком много запросов"))
             ).bodyToMono(Void.class).retryWhen(retry).block();
     }
 
     public StateResponse getState(Long chat) {
         return webClient.get().uri("/tg-chat/state/{id}", chat).accept(MediaType.APPLICATION_JSON)
             .retrieve().onStatus(
+                HttpStatusCode::is5xxServerError,
+                error -> Mono.error(new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера"
+                ))
+            ).onStatus(
                 HttpStatus.TOO_MANY_REQUESTS::equals,
-                error -> Mono.error(new TooManyRequestsException("to many requests"))
+                error -> Mono.error(new TooManyRequestsException("Слишком много запросов"))
             ).bodyToMono(StateResponse.class).retryWhen(retry).block();
     }
 
@@ -133,8 +126,12 @@ public class ScrapperClient {
             .onStatus(
                 HttpStatusCode::is5xxServerError,
                 error -> Mono.error(new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера"
                 ))
+
+            ).onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                error -> Mono.error(new TooManyRequestsException("Слишком много запросов"))
             ).bodyToMono(Boolean.class).retryWhen(retry).block();
     }
 }

@@ -25,5 +25,6 @@ public class Unsubscribe implements Command {
             return new SendMessage(idChat, "Вы отписались от бота. Жаль...");
         }
         return new SendMessage(idChat, "Для отписки нужна подписка)");
+
     }
 }
