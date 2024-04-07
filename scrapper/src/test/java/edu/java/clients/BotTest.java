@@ -3,9 +3,9 @@ package edu.java.clients;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.ScrapperApplication;
+import edu.java.scrapper.IntegrationTest;
 import java.util.ArrayList;
 import java.util.List;
-import edu.java.scrapper.IntegrationTest;
 import org.example.dto.request.SendUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
 @WireMockTest
 @DirtiesContext
-public class BotUnitTest {
+public class BotTest extends IntegrationTest {
     @Autowired
     private BotClient client;
 

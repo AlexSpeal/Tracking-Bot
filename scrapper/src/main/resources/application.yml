@@ -7,7 +7,7 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
-  database-access-type: jpa
+  database-access-type: jdbc
   retry-config:
     retry-type: constant
     attempts: 5
@@ -19,14 +19,6 @@ app:
       - 404
 
 spring:
-  cache:
-    jcache:
-      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
-    cache-names:
-      - rate-limit-buckets-scrapper
-    caffeine:
-      spec: maximumSize=10000,expireAfterAccess=1m
-
   liquibase:
     enabled: false
   application:
@@ -41,6 +33,13 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         enable_lazy_load_no_trans: true
+  cache:
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+    cache-names:
+      - rate-limit-buckets-scrapper
+    caffeine:
+      spec: maximumSize=10000,expireAfterAccess=1m
 
 
 bucket4j:

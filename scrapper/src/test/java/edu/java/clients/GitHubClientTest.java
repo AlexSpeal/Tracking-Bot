@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.web.server.ResponseStatusException;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertThrows;
@@ -24,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
 @WireMockTest
 @DirtiesContext
-class GitHubClientTest {
+class GitHubClientTest extends IntegrationTest{
     static final String BODY_REQUEST = "{\"name\": \"vkusnoe_brevno\",\"pushed_at\": \"123\"}";
     static final String BODY_REQUEST2 = "[{\"name\": \"main\",\"commit\": {\"sha\": \"qwerty\"}}\n]";
     static final String BODY_REQUEST3 = "[{\"number\": 1,\"title\": \"zxc\",\"created_at\": \"2024-03-23T20:13:54Z\"}]";

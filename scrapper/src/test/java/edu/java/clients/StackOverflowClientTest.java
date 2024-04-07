@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
 @WireMockTest
 @DirtiesContext
-class StackOverflowClientTest {
+class StackOverflowClientTest extends IntegrationTest {
     static final String BODY_REQUEST = "{\"items\":[{\"question_id\":148}]}";
     static final String URL = "/questions/52841620?site=stackoverflow";
 
