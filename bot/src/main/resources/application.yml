@@ -10,7 +10,11 @@ app:
       - 502
       - 503
       - 404
-
+  kafka:
+    bootstrap-server: localhost:29091, localhost:29092, localhost:29093
+    topic-name: update-messages-topic
+    partitions-count: 2
+    replication-count: 1
 spring:
   application:
     name: bot

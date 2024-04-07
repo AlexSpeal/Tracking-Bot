@@ -1,7 +1,7 @@
 package edu.java.scheduler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.java.clients.BotClient;
+import edu.java.clients.interfaces.UpdateLinkService;
 import edu.java.clients.GitHubClient;
 import edu.java.clients.StackOverflowClient;
 import edu.java.data.GitHubData;
@@ -20,6 +20,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.LinkParser;
 import org.example.dto.request.SendUpdateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ import org.springframework.stereotype.Component;
 public class LinkUpdaterScheduler {
     private final LinkService linkService;
     private final LinkUpdater linkUpdaterService;
-    private final BotClient botClient;
+    private final UpdateLinkService updateLinkService;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
     private final GithubHandler githubHandler;
@@ -51,7 +52,7 @@ public class LinkUpdaterScheduler {
                 default -> "";
             };
             if (!description.isEmpty()) {
-                botClient.updates(new SendUpdateRequest(
+                updateLinkService.updates(new SendUpdateRequest(
                     links.getLinkId(),
                     links.getUrl().toString(),
                     description,

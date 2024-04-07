@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/updates")
 public class BotController {
-    @Autowired
-    private TelegramBot telegramBot;
+    private final BotService botService;
+
+    public BotController(BotService botService) {
+        this.botService = botService;
+    }
 
     @Operation(summary = "Отправить обновление")
     @ApiResponses(value = {
@@ -42,11 +45,9 @@ public class BotController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
+
     public String sendUpdate(@RequestBody @Valid SendUpdateRequest sendUpdateRequest) {
-        for (long id : sendUpdateRequest.tgChatIds()) {
-            telegramBot.sendUpdate(new SendMessage(id, sendUpdateRequest.description()));
-        }
+        botService.sendUpdate(sendUpdateRequest);
         return "Обновление отправлено!";
     }
-
 }

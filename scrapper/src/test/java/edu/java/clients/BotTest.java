@@ -3,6 +3,7 @@ package edu.java.clients;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.ScrapperApplication;
+import edu.java.clients.interfaces.UpdateLinkService;
 import edu.java.scrapper.IntegrationTest;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @DirtiesContext
 public class BotTest extends IntegrationTest {
     @Autowired
-    private BotClient client;
+    private UpdateLinkService client;
 
     @Autowired
     GitHubClient gitHubClient;
