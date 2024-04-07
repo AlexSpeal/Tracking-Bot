@@ -1,11 +1,13 @@
 package edu.java.scrapper;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.DirtiesContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+@DirtiesContext
 public class MigrationTest extends IntegrationTest {
     @Test
     public void chatTest() throws SQLException {

@@ -1,5 +1,6 @@
 package edu.java.bucket;
 
+import edu.java.scrapper.IntegrationTest;
 import edu.java.servises.interfaces.LinkService;
 import edu.java.servises.jdbc.JdbcTgChatService;
 import org.junit.jupiter.api.Test;

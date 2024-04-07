@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.ScrapperApplication;
 import java.util.ArrayList;
 import java.util.List;
+import edu.java.scrapper.IntegrationTest;
 import org.example.dto.request.SendUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
