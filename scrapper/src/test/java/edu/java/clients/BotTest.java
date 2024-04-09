@@ -40,6 +40,11 @@ public class BotTest extends IntegrationTest {
         registry.add("app.base-url-bot", wireMockExtension::baseUrl);
     }
 
+    @DynamicPropertySource
+    public static void setType(DynamicPropertyRegistry registry) {
+        registry.add("app.use-queue", () -> "false");
+    }
+
     @Test
     public void updates() {
         List<Long> list = new ArrayList<>();
