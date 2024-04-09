@@ -22,7 +22,7 @@ public class BotQueueConsumer {
         this.applicationConfig = applicationConfig;
     }
 
-    @RetryableTopic(attempts = "5", dltStrategy = DltStrategy.ALWAYS_RETRY_ON_ERROR)
+    @RetryableTopic(attempts = "1", dltStrategy = DltStrategy.ALWAYS_RETRY_ON_ERROR)
     @KafkaListener(topics = "${app.kafka.topic-name}",
                    groupId = "group1",
                    containerFactory = "kafkaListenerContainerFactory")

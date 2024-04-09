@@ -11,6 +11,7 @@ import org.example.dto.request.SendUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @DirtiesContext
 public class BotTest extends IntegrationTest {
     @Autowired
-    private UpdateLinkService client;
+    private UpdateLinkService getBotClient;
 
     @Autowired
     GitHubClient gitHubClient;
@@ -50,6 +51,6 @@ public class BotTest extends IntegrationTest {
                 .withHeader("Content-Type", "application/json")
             ));
 
-        assertDoesNotThrow(() -> client.updates(request));
+        assertDoesNotThrow(() -> getBotClient.updates(request));
     }
 }
