@@ -11,15 +11,16 @@ app:
       - 503
       - 404
   kafka:
-    bootstrap-server: localhost:29091, localhost:29092, localhost:29093
+    bootstrap-server: localhost:9092, localhost:9093, localhost:9094
     topic-name: update-messages-topic
-    partitions-count: 2
+    partitions-count: 1
     replication-count: 1
 spring:
   application:
     name: bot
   jackson:
     time-zone: UTC
+
 
 server:
   port: 8090

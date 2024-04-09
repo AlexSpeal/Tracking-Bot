@@ -1,8 +1,8 @@
 package edu.java.configuration;
 
-import edu.java.clients.interfaces.UpdateLinkService;
 import edu.java.clients.BotClient;
 import edu.java.clients.ScrapperQueueProducer;
+import edu.java.clients.interfaces.UpdateLinkService;
 import org.example.dto.request.SendUpdateRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

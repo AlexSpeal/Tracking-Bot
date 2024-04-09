@@ -1,10 +1,9 @@
-package edu.java.bot.controller;
+package edu.java.bot.service;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import jakarta.validation.Valid;
+import edu.java.bot.controller.TelegramBot;
 import org.example.dto.request.SendUpdateRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class BotService {
@@ -14,7 +13,7 @@ public class BotService {
         this.telegramBot = telegramBot;
     }
 
-    public void sendUpdate(@RequestBody @Valid SendUpdateRequest sendUpdateRequest) {
+    public void sendUpdate(SendUpdateRequest sendUpdateRequest) {
         for (long id : sendUpdateRequest.tgChatIds()) {
             telegramBot.sendUpdate(new SendMessage(id, sendUpdateRequest.description()));
         }

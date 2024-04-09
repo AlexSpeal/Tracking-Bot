@@ -19,10 +19,10 @@ app:
       - 404
   use-queue: true
   kafka:
-    bootstrap-server: localhost:29091, localhost:29092, localhost:29093
+    bootstrap-server: localhost:9092, localhost:9093, localhost:9094
     topic-name: update-messages-topic
-    partitions-count: 2
-    replication-count: 1
+    partitions-count: 1
+    replication-count: 3
 
 spring:
   liquibase:

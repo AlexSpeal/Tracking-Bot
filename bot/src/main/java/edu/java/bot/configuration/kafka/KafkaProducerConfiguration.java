@@ -1,6 +1,6 @@
-package edu.java.configuration.kafka;
+package edu.java.bot.configuration.kafka;
 
-import edu.java.configuration.ApplicationConfig;
+import edu.java.bot.configuration.ApplicationConfig;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
