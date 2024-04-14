@@ -9,7 +9,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_SERVERS: zoo:2888:3888
-      ZOOKEEPER_TICK_TIME: 1
+      ZOOKEEPER_TICK_TIME: 200
 
   kafka1:
     image: confluentinc/cp-kafka:7.3.2
