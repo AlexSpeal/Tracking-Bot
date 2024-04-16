@@ -19,6 +19,7 @@ import static org.junit.Assert.assertThrows;
 
 @DirtiesContext
 class JooqChatLinkRepositoryTest extends IntegrationTest {
+
     @Autowired
     private JooqChatLinkRepository jooqChatLinkRepository;
     @Autowired
