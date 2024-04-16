@@ -7,7 +7,7 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
-  database-access-type: jdbc
+  database-access-type: jooq
   retry-config:
     retry-type: constant
     attempts: 5

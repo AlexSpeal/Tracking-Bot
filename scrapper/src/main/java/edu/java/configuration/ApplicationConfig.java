@@ -38,7 +38,7 @@ public record ApplicationConfig(
     }
 
     public enum AccessType {
-        JDBC, JPA
+        JDBC, JPA, JOOQ
     }
 
     public record RetryConfig(RetryType retryType, int attempts, Duration minDelay, List<Integer> statusCodes) {

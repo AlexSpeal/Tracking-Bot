@@ -3,7 +3,6 @@ package edu.java.configuration;
 import edu.java.domain.implementations.jdbc.JdbcChatLinkRepository;
 import edu.java.domain.implementations.jdbc.JdbcChatRepository;
 import edu.java.domain.implementations.jdbc.JdbcLinkRepository;
-import edu.java.domain.interfaces.ChatLinkRepository;
 import edu.java.servises.handlers.GithubHandler;
 import edu.java.servises.handlers.StackOverflowHandler;
 import edu.java.servises.interfaces.LinkService;
@@ -22,7 +21,7 @@ public class JdbcAccessConfiguration {
     @Bean
     public LinkService linkService(
         JdbcLinkRepository linkRepository,
-        ChatLinkRepository chatLinkRepository,
+        JdbcChatLinkRepository chatLinkRepository,
         GithubHandler githubHandler,
         StackOverflowHandler stackOverflowHandler
 
