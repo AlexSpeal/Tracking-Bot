@@ -48,7 +48,7 @@
     <modules>
         <module>bot</module>
         <module>scrapper</module>
-        <module>modules</module>
+        <module>models</module>
         <module>scrapper-jooq</module>
     </modules>
 
