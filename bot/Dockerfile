@@ -1,4 +1,4 @@
-FROM maven:3.9.6-amazoncorretto-21-debian AS builder
+FROM maven:3.8.6-amazoncorretto-21-debian AS builder
 
 WORKDIR /app
 
