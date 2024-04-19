@@ -6,8 +6,8 @@ COPY pom.xml /app/pom.xml
 COPY .git /app/.git
 COPY scrapper/pom.xml /app/scrapper/pom.xml
 COPY scrapper/src/main /app/scrapper/src/main
-COPY modules/pom.xml /app/models/pom.xml
-COPY modules/src/main /app/models/src/main
+COPY modules/pom.xml /app/modules/pom.xml
+COPY modules/src/main /app/modules/src/main
 
 RUN mvn -f scrapper/pom.xml package
 

@@ -6,8 +6,8 @@ COPY pom.xml /app/pom.xml
 COPY .git /app/.git
 COPY bot/pom.xml /app/bot/pom.xml
 COPY bot/src/main /app/bot/src/main
-COPY modules/pom.xml /app/models/pom.xml
-COPY modules/src/main /app/models/src/main
+COPY modules/pom.xml /app/modules/pom.xml
+COPY modules/src/main /app/modules/src/main
 
 RUN mvn -f bot/pom.xml package
 
