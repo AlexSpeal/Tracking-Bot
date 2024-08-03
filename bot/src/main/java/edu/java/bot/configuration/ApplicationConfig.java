@@ -14,10 +14,22 @@ public record ApplicationConfig(
     String baseUrlScrapper,
     @NotEmpty
     String telegramToken,
-    RetryConfig retryConfig) {
+    RetryConfig retryConfig,
+    @NotNull
+    boolean useQueue,
+
+    @NotNull
+    KafkaConfig kafka) {
     public record RetryConfig(RetryType retryType, int attempts, Duration minDelay, List<Integer> statusCodes) {
         public enum RetryType {
             CONSTANT, LINEAR, EXPONENTIAL
         }
+
+    }
+
+    public record KafkaConfig(@NotNull String bootstrapServer,
+                              @NotNull String topicName,
+                              @NotNull int partitionsCount,
+                              @NotNull short replicationCount) {
     }
 }

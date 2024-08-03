@@ -20,7 +20,12 @@ public record ApplicationConfig(
     @Bean
     DataSourceValues dataSourceValues,
     AccessType databaseAccessType,
-    RetryConfig retryConfig
+    RetryConfig retryConfig,
+    @NotNull
+    boolean useQueue,
+
+    @NotNull
+    KafkaConfig kafka
 ) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
@@ -40,6 +45,12 @@ public record ApplicationConfig(
         public enum RetryType {
             CONSTANT, LINEAR, EXPONENTIAL
         }
+    }
+
+    public record KafkaConfig(@NotNull String bootstrapServer,
+                              @NotNull String topicName,
+                              @NotNull int partitionsCount,
+                              @NotNull short replicationCount) {
     }
 
 }

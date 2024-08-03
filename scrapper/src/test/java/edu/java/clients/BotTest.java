@@ -3,6 +3,7 @@ package edu.java.clients;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.ScrapperApplication;
+import edu.java.clients.interfaces.UpdateLinkService;
 import edu.java.scrapper.IntegrationTest;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.example.dto.request.SendUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -25,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @DirtiesContext
 public class BotTest extends IntegrationTest {
     @Autowired
-    private BotClient client;
+    private UpdateLinkService getBotClient;
 
     @Autowired
     GitHubClient gitHubClient;
@@ -36,6 +38,11 @@ public class BotTest extends IntegrationTest {
     @DynamicPropertySource
     public static void setUpMockBaseUrl(DynamicPropertyRegistry registry) {
         registry.add("app.base-url-bot", wireMockExtension::baseUrl);
+    }
+
+    @DynamicPropertySource
+    public static void setType(DynamicPropertyRegistry registry) {
+        registry.add("app.use-queue", () -> "false");
     }
 
     @Test
@@ -49,6 +56,6 @@ public class BotTest extends IntegrationTest {
                 .withHeader("Content-Type", "application/json")
             ));
 
-        assertDoesNotThrow(() -> client.updates(request));
+        assertDoesNotThrow(() -> getBotClient.updates(request));
     }
 }

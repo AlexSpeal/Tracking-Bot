@@ -1,6 +1,6 @@
 package edu.java.bot.controller;
 
-import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.service.BotService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.example.dto.request.SendUpdateRequest;
 import org.example.dto.response.ApiErrorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/updates")
 public class BotController {
-    @Autowired
-    private TelegramBot telegramBot;
+    private final BotService botService;
+
+    public BotController(BotService botService) {
+        this.botService = botService;
+    }
 
     @Operation(summary = "Отправить обновление")
     @ApiResponses(value = {
@@ -42,11 +44,9 @@ public class BotController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
+
     public String sendUpdate(@RequestBody @Valid SendUpdateRequest sendUpdateRequest) {
-        for (long id : sendUpdateRequest.tgChatIds()) {
-            telegramBot.sendUpdate(new SendMessage(id, sendUpdateRequest.description()));
-        }
+        botService.sendUpdate(sendUpdateRequest);
         return "Обновление отправлено!";
     }
-
 }
