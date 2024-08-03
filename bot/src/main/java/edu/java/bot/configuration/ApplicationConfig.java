@@ -11,6 +11,5 @@ public record ApplicationConfig(
     @NotNull
     String baseUrlScrapper,
     @NotEmpty
-    String telegramToken
-) {
+    String telegramToken) {
 }

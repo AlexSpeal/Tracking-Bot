@@ -8,10 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 import org.example.dto.response.ApiErrorResponse;
+import org.example.dto.response.StateResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tg-chat")
-@AllArgsConstructor
 public class ScrapperChatController {
-    private final TgChatService tgChatService;
+    @Autowired
+    private TgChatService tgChatService;
 
     @Operation(summary = "Зарегистрировать чат")
     @ApiResponses(value = {
@@ -43,7 +46,7 @@ public class ScrapperChatController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String registerChat(@RequestBody @Valid @Positive Long id, String username) {
+    public String registerChat(@PathVariable @Valid @Positive Long id, @RequestBody String username) {
         tgChatService.register(id, username);
         return "Удачно!";
     }
@@ -74,8 +77,71 @@ public class ScrapperChatController {
             })
     })
     @DeleteMapping("/{id}")
-    public String deleteChat(@RequestBody @Valid @Positive Long id) {
+    public String deleteChat(@PathVariable @Valid @Positive Long id) {
         tgChatService.unregister(id);
         return "Чат удалён";
     }
+
+    @Operation(summary = "Обновить статус")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Статус успешно обновлен"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Некорректные параметры запроса",
+            content = {
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation
+                        = ApiErrorResponse.class))
+            }),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Чат не существует",
+            content = {
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation
+                        = ApiErrorResponse.class))
+            })
+    })
+    @PostMapping("/state/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void setState(@PathVariable @Valid @Positive Long id, @RequestBody String state) {
+        tgChatService.setState(id, state);
+    }
+
+    @Operation(summary = "Получить статус")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Статус успешно получен"
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Некорректные параметры запроса",
+            content = {
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation
+                        = ApiErrorResponse.class))
+            }),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Чат не существует",
+            content = {
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation
+                        = ApiErrorResponse.class))
+            })
+    })
+    @GetMapping("/state/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public StateResponse getState(@PathVariable @Valid @Positive Long id) {
+        return tgChatService.getState(id);
+    }
+
 }

@@ -1,6 +1,8 @@
 package edu.java.dto.jdbc;
 
+import edu.java.entities.LinkEntity;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,5 +32,18 @@ public class LinkDto {
         this.lastUpdate = lastUpdate;
         this.type = type;
         this.data = data;
+    }
+
+    public LinkDto(LinkEntity linkEntity) {
+        this.linkId = linkEntity.getLinkId();
+        try {
+            this.url = new URI(linkEntity.getUrl());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        this.updatedAt = linkEntity.getUpdatedAt();
+        this.lastUpdate = linkEntity.getLastUpdate();
+        this.type = linkEntity.getType();
+        this.data = linkEntity.getData();
     }
 }

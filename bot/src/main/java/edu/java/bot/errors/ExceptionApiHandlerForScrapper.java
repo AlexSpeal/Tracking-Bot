@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ExceptionApiHandler {
+public class ExceptionApiHandlerForScrapper {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> validationException(MethodArgumentNotValidException exception) {
         String stackTrace = ExceptionUtils.getStackTrace(exception);

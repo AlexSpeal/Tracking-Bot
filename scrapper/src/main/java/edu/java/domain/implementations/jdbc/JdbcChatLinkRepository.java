@@ -1,6 +1,6 @@
-package edu.java.dao.implementations;
+package edu.java.domain.implementations.jdbc;
 
-import edu.java.dao.interfaces.ChatLinkRepository;
+import edu.java.domain.interfaces.ChatLinkRepository;
 import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
 import edu.java.errors.LinkWasTrackedException;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @AllArgsConstructor
-public class JdbcChatLinkDao implements ChatLinkRepository {
+public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
 

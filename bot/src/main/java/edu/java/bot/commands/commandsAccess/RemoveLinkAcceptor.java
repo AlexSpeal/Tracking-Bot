@@ -2,24 +2,47 @@ package edu.java.bot.commands.commandsAccess;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.commands.Command;
-import edu.java.bot.user.State;
-import edu.java.bot.user.User;
-import edu.java.bot.user.UsersBase;
-import static edu.java.bot.user.State.EnumState.NONE;
+import java.net.URI;
+import java.net.URISyntaxException;
+import org.example.dto.LinkParser;
+import org.example.dto.request.AddLinkRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 
 public class RemoveLinkAcceptor implements Command {
+    private final ScrapperClient scrapperClient;
+
+    @Autowired
+    public RemoveLinkAcceptor(ScrapperClient scrapperClient) {
+        this.scrapperClient = scrapperClient;
+    }
+
     @Override
-    public SendMessage apply(Update update, UsersBase usersBase) {
+    public SendMessage apply(Update update) {
         String text = update.message().text();
-        User user = usersBase.getUser(update.message().chat().id());
-        String answer = "Вы ввели неправильную ссылку";
-        if (user.getSites().contains(text)) {
-            user.getSites().remove(text);
-            answer = "Ссылка удалена";
-            usersBase.getUser(update.message().chat().id()).setState(new State(NONE));
-            return new SendMessage(update.message().chat().id(), answer);
+        String answer = "Вы ввели неправильную ссылку!";
+        long idChat = update.message().chat().id();
+        if (LinkParser.check(text)) {
+            if (scrapperClient.getLinks(idChat).links().stream()
+                .anyMatch(link -> link.url().toString().equals(text))) {
+                try {
+                    scrapperClient.deleteLink(idChat, new AddLinkRequest(new URI(text)));
+                    answer = "Ссылка удалена!";
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+                scrapperClient.setState(idChat, "NONE");
+
+            } else {
+                answer = "У вас отсутсвует данная ссылка!";
+                return new SendMessage(idChat, answer);
+            }
+
         }
-        return new SendMessage(update.message().chat().id(), answer);
+        return new SendMessage(idChat, answer);
     }
 }
