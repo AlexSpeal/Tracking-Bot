@@ -1,4 +1,23 @@
 services:
+  prometheus:
+    image: prom/prometheus:v2.51.2
+    volumes:
+      - ./prometheus.yml:/etc/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - --config.file=/etc/prometheus.yml
+    ports:
+      - 9090:9090
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+
   zoo:
     image: confluentinc/cp-zookeeper:7.3.2
     hostname: zoo
@@ -108,6 +127,8 @@ services:
       - backend
 
 volumes:
+  prometheus_data: { }
+  grafana_data: { }
   kafka1: { }
   kafka2: { }
   kafka3: { }

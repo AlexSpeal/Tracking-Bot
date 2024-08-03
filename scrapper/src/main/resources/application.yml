@@ -7,7 +7,7 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
-  database-access-type: jdbc
+  database-access-type: jooq
   retry-config:
     retry-type: constant
     attempts: 5
@@ -17,7 +17,7 @@ app:
       - 502
       - 503
       - 404
-  use-queue: true
+  use-queue: false
   kafka:
     bootstrap-server: localhost:9092, localhost:9093, localhost:9094
     topic-name: update-messages-topic
@@ -66,6 +66,25 @@ bucket4j:
 server:
   port: 8080
 
+management:
+  server:
+    port: 8081
+
+  endpoint:
+    health:
+      show-details: always
+
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health, info, prometheus
+      path-mapping:
+        prometheus: metrics
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
 logging:
   config: classpath:log4j2-plain.xml
 
