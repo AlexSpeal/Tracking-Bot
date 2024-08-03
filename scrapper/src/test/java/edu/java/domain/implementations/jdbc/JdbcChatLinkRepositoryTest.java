@@ -1,4 +1,4 @@
-package edu.java.domain.implementations;
+package edu.java.domain.implementations.jdbc;
 
 import edu.java.domain.implementations.jdbc.JdbcChatLinkRepository;
 import edu.java.domain.implementations.jdbc.JdbcChatRepository;
