@@ -13,7 +13,7 @@ jobs:
     name: Build
     permissions:
       packages: write
-      pull-requests: write 
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +25,18 @@ jobs:
 
       - name: maven build
         run: mvn -pl bot -am package
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+            registry: ghcr.io
+            username: ${{ github.repository_owner }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build and publish the docker image
+        run: |
+            docker build --tag ghcr.io/alexspeal/bot:latest -f ${{ github.workspace }}/bot/Dockerfile .
+            docker push ghcr.io/alexspeal/bot:latest
 
       - id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
