@@ -2,20 +2,22 @@ package edu.java.domain.implementations;
 
 import edu.java.domain.implementations.jdbc.JdbcLinkRepository;
 import edu.java.dto.jdbc.LinkDto;
-import edu.java.errors.DuplicateLinkException;
+
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import errors.DuplicateLinkException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertThrows;
-
-class JpaLinkRepositoryTest extends IntegrationTest {
+@DirtiesContext
+class JdpcLinkRepositoryTest extends IntegrationTest {
     @Autowired
     private JdbcLinkRepository jdbcLinkRepository;
 

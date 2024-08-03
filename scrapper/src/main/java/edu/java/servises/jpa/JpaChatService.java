@@ -3,9 +3,9 @@ package edu.java.servises.jpa;
 import edu.java.domain.implementations.jpa.JpaChatRepository;
 import edu.java.domain.implementations.jpa.JpaLinkRepository;
 import edu.java.entities.ChatEntity;
-import edu.java.errors.ChatAlreadyExistsException;
-import edu.java.errors.ChatNotExistsException;
 import edu.java.servises.interfaces.TgChatService;
+import errors.ChatAlreadyExistsException;
+import errors.ChatNotExistsException;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.response.StateResponse;
@@ -32,14 +32,15 @@ public class JpaChatService implements TgChatService {
             throw new ChatNotExistsException("Чат не был создал ранее!");
         }
         var links = jpaChatRepository.findById(tgChatId).orElseThrow().getLinks();
-        jpaChatRepository.deleteById(tgChatId);
-        jpaChatRepository.flush();
+
         for (var link : links) {
 
-            if (link.getChats().isEmpty()) {
+            if (link.getChats().size() == 1) {
                 jpaLinkRepository.deleteById(link.getLinkId());
             }
         }
+        jpaChatRepository.deleteById(tgChatId);
+        jpaChatRepository.flush();
         jpaLinkRepository.flush();
     }
 
@@ -47,6 +48,11 @@ public class JpaChatService implements TgChatService {
     public void setState(long tgChatId, String state) {
         jpaChatRepository.findById(tgChatId).orElseThrow().setState(state);
         jpaChatRepository.flush();
+    }
+
+    @Override
+    public Boolean isRegister(long tgChatId) {
+        return jpaChatRepository.existsById(tgChatId);
     }
 
     @Override

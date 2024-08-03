@@ -3,7 +3,7 @@ package edu.java.domain.implementations.jdbc;
 import edu.java.domain.interfaces.ChatLinkRepository;
 import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
-import edu.java.errors.LinkWasTrackedException;
+import errors.LinkWasTrackedException;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;

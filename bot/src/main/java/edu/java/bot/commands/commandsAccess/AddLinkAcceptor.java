@@ -25,17 +25,16 @@ public class AddLinkAcceptor implements Command {
         String text = update.message().text();
         String answer = "Данная ссылка уже отслеживается!";
         long idChat = update.message().chat().id();
+
         if (LinkParser.check(text)) {
             if (scrapperClient.getLinks(idChat).links().stream()
                 .noneMatch(link -> link.url().toString().equals(text))) {
                 answer = "Ссылка принята!";
                 try {
                     scrapperClient.setLink(idChat, new AddLinkRequest(new URI(text)));
-
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
-
             }
             scrapperClient.setState(idChat, "NONE");
             return new SendMessage(idChat, answer);

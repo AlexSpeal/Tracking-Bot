@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Untrack implements Command {
+public class Unsubscribe implements Command {
+    @Autowired
     private final ScrapperClient scrapperClient;
 
-    @Autowired
-    public Untrack(ScrapperClient scrapperClient) {
+    public Unsubscribe(ScrapperClient scrapperClient) {
         this.scrapperClient = scrapperClient;
     }
 
@@ -20,16 +20,11 @@ public class Untrack implements Command {
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
 
-        String answer = "Список пуст, ничего удалять не нужно!";
         if (scrapperClient.isRegister(idChat)) {
-            if (!scrapperClient.getLinks(idChat).links().isEmpty()) {
-                scrapperClient.setState(idChat, "DEL");
-                answer = "Вставьте ссылку ( /cancel для отмены ввода)";
-
-            }
-            return new SendMessage(idChat, answer);
+            scrapperClient.deleteChat(idChat);
+            return new SendMessage(idChat, "Вы отписались от бота. Жаль...");
         }
-        return new SendMessage(idChat, "Вы не авторизованы!");
+        return new SendMessage(idChat, "Для отписки нужна подписка)");
 
     }
 }

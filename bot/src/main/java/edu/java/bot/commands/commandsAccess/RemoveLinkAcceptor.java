@@ -26,15 +26,16 @@ public class RemoveLinkAcceptor implements Command {
         String text = update.message().text();
         String answer = "Вы ввели неправильную ссылку!";
         long idChat = update.message().chat().id();
+
         if (LinkParser.check(text)) {
             if (scrapperClient.getLinks(idChat).links().stream()
                 .anyMatch(link -> link.url().toString().equals(text))) {
                 try {
                     scrapperClient.deleteLink(idChat, new AddLinkRequest(new URI(text)));
-                    answer = "Ссылка удалена!";
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
+                answer = "Ссылка удалена!";
                 scrapperClient.setState(idChat, "NONE");
 
             } else {
@@ -44,5 +45,6 @@ public class RemoveLinkAcceptor implements Command {
 
         }
         return new SendMessage(idChat, answer);
+
     }
 }

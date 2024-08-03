@@ -12,5 +12,7 @@ public interface ChatRepository {
 
     String getState(Long id);
 
+    Boolean isRegister(Long id);
+
     List<ChatDto> findAll();
 }

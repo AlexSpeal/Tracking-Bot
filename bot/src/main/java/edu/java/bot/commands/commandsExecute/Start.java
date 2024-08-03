@@ -20,11 +20,12 @@ public class Start implements Command {
     public SendMessage apply(Update update) {
         long idChat = update.message().chat().id();
         String username = update.message().chat().username();
-        try {
-            scrapperClient.createChat(idChat, username);
-        } catch (Exception e) {
+
+        if (scrapperClient.isRegister(idChat)) {
             return new SendMessage(idChat, "Вы уже зарегистрированы!");
         }
+        scrapperClient.createChat(idChat, username);
         return new SendMessage(idChat, "Добро пожаловать, " + username);
+
     }
 }

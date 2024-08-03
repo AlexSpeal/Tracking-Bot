@@ -6,9 +6,9 @@ import edu.java.domain.implementations.jdbc.JdbcLinkRepository;
 import edu.java.dto.jdbc.ChatDto;
 import edu.java.dto.jdbc.ChatLinkDto;
 import edu.java.dto.jdbc.LinkDto;
-import edu.java.errors.ChatAlreadyExistsException;
-import edu.java.errors.ChatNotExistsException;
 import edu.java.servises.interfaces.TgChatService;
+import errors.ChatAlreadyExistsException;
+import errors.ChatNotExistsException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +48,11 @@ public class JdbcTgChatService implements TgChatService {
     @Override
     public void setState(long tgChatId, String state) {
         jdbcChatRepository.setState(tgChatId, state);
+    }
+
+    @Override
+    public Boolean isRegister(long tgChatId) {
+        return jdbcChatRepository.isRegister(tgChatId);
     }
 
     @Override

@@ -5,26 +5,27 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.ScrapperApplication;
 import edu.java.dto.jdbc.stackOverflow.Question;
+import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.web.server.ResponseStatusException;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
 @WireMockTest
-class StackOverflowClientTest {
+@DirtiesContext
+class StackOverflowClientTest extends IntegrationTest {
     static final String BODY_REQUEST = "{\"items\":[{\"question_id\":148}]}";
     static final String URL = "/questions/52841620?site=stackoverflow";
-    static final String ERROR_404 = "404 NOT_FOUND \"Link is not valid\"";
-    static final String ERROR_500 = "500 INTERNAL_SERVER_ERROR \"Internal Server Error\"";
 
     @Autowired
     StackOverflowClient stackOverflowClient;
@@ -59,14 +60,7 @@ class StackOverflowClientTest {
             .withBody(BODY_REQUEST)
             .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
         ));
-
-        String message = "";
-        try {
-            stackOverflowClient.getQuestion(777);
-        } catch (ResponseStatusException e) {
-            message = e.getMessage();
-        }
-        assertEquals(ERROR_404, message);
+        assertThrows(RuntimeException.class, () -> stackOverflowClient.getQuestion(777));
     }
 
     @Test
@@ -79,12 +73,6 @@ class StackOverflowClientTest {
             .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
         ));
 
-        String message = "";
-        try {
-            stackOverflowClient.getQuestion(52841620);
-        } catch (ResponseStatusException e) {
-            message = e.getMessage();
-        }
-        assertEquals(ERROR_500, message);
+        assertThrows(RuntimeException.class, () -> stackOverflowClient.getQuestion(52841620));
     }
 }

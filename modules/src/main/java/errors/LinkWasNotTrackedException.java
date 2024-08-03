@@ -1,4 +1,4 @@
-package edu.java.errors;
+package errors;
 
 public class LinkWasNotTrackedException extends RuntimeException {
     public LinkWasNotTrackedException(String message) {

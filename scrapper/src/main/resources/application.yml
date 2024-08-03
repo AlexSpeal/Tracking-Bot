@@ -7,9 +7,16 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
-  database-access-type: jpa
-
-
+  database-access-type: jdbc
+  retry-config:
+    retry-type: constant
+    attempts: 5
+    min-delay: 1m
+    status-codes:
+      - 500
+      - 502
+      - 503
+      - 404
 
 spring:
   liquibase:
@@ -26,8 +33,29 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         enable_lazy_load_no_trans: true
+  cache:
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+    cache-names:
+      - rate-limit-buckets-scrapper
+    caffeine:
+      spec: maximumSize=10000,expireAfterAccess=1m
 
 
+bucket4j:
+  cache-to-use: jcache
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets-scrapper
+      url: /.*
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"exceptionMessage\": \"Превышен лимит запросов. Попробуйте позже!\" }"
+      rate-limits:
+        - cache-key: "getHeader('X-api-key')"
+          bandwidths:
+            - capacity: 100
+              time: 1
+              unit: minutes
+              refill-speed: interval
 
 server:
   port: 8080

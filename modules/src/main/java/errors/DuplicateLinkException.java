@@ -1,4 +1,4 @@
-package edu.java.errors;
+package errors;
 
 public class DuplicateLinkException extends RuntimeException {
     public DuplicateLinkException(String massage) {

@@ -1,4 +1,4 @@
-package edu.java.errors;
+package errors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.example.dto.response.ApiErrorResponse;
@@ -34,4 +34,5 @@ public class ExceptionApiHandler {
 
         return ResponseEntity.badRequest().body(response);
     }
+
 }

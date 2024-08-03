@@ -2,6 +2,7 @@ package edu.java.configuration;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
+import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +19,8 @@ public record ApplicationConfig(
     Scheduler scheduler,
     @Bean
     DataSourceValues dataSourceValues,
-    AccessType databaseAccessType
+    AccessType databaseAccessType,
+    RetryConfig retryConfig
 ) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
@@ -33,4 +35,11 @@ public record ApplicationConfig(
     public enum AccessType {
         JDBC, JPA
     }
+
+    public record RetryConfig(RetryType retryType, int attempts, Duration minDelay, List<Integer> statusCodes) {
+        public enum RetryType {
+            CONSTANT, LINEAR, EXPONENTIAL
+        }
+    }
+
 }
